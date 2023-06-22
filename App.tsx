@@ -1,20 +1,60 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useFonts, NunitoSans_400Regular } from '@expo-google-fonts/nunito-sans';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StyleSheet } from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import Home from './Home';
+import Header from './Header';
+import FriendDetail from './FriendDetail';
+
+interface User {
+  username: string,
+  pfp: string,
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export interface Friend {
+  username: string,
+  pfp: string,
+  balance: string,
+  lastTransaction: Date, 
+  id: string,
+}
+
+interface Transaction {
+  date: Date,
+  note: string,
+  amount: number,
+  id: string,
+}
+
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+  let [fontsLoaded] = useFonts({
+      NunitoSans_400Regular,
+  });
+
+  if (!fontsLoaded) {
+      return null;
+  }
+
+  return (  
+    <NavigationContainer>
+      <Stack.Navigator
+        // screenOptions={{header: (props) => <Header/>}}
+      >
+        <Stack.Screen
+          name="Home"
+          component={ Home }
+          options={{
+            header: (props) => <Header/> 
+          }}
+        />
+        <Stack.Screen
+          name="FriendDetail"
+          component={ FriendDetail }
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
