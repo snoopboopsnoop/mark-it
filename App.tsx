@@ -1,11 +1,11 @@
 import { useFonts, NunitoSans_400Regular } from '@expo-google-fonts/nunito-sans';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StyleSheet } from 'react-native';
 
 import Home from './Home';
 import Header from './Header';
 import FriendDetail from './FriendDetail';
+import TransactionPage from './TransactionPage';
 
 interface User {
   username: string,
@@ -47,12 +47,34 @@ export default function App() {
           name="Home"
           component={ Home }
           options={{
-            header: (props) => <Header/> 
+            header: (props) =>
+              <Header
+                home={ true }
+                title={ 'home'}
+              /> 
           }}
         />
         <Stack.Screen
           name="FriendDetail"
           component={ FriendDetail }
+          options={{
+            header: (props) =>
+              <Header
+                home={ false }
+                title={ 'Details'}
+              /> 
+          }}
+        />
+        <Stack.Screen
+          name="TransactionPage"
+          component= { TransactionPage }
+          options={{
+            header: (props) =>
+              <Header
+                home={ false }
+                title={ 'New Transaction'}
+              /> 
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

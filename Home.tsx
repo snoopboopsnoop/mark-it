@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
 import { AntDesign }  from '@expo/vector-icons';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 import FriendDisplay from './Friend';
 
@@ -79,6 +80,7 @@ const FRIENDS:Friend[] = [
 
 export default function Home() {
   const [ accHeight, setHeight ] = useState(0)
+  const navigation = useNavigation()
 
   console.log(accHeight/5)
   return (  
@@ -106,6 +108,9 @@ export default function Home() {
       <View style={styles.footer}>
           <TouchableOpacity
             style={styles.addButton}
+            onPress={() => {
+              navigation.navigate('TransactionPage')
+            }}
           >
             <AntDesign
               name="plus"

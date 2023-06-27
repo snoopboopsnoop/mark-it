@@ -1,35 +1,57 @@
-import { StyleSheet, View, Image, TextInput } from 'react-native';
+import { StyleSheet, View, Image, TextInput, Text, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { AntDesign }  from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
+type headerProps = {
+  home: boolean,
+  title: string,
+}
 
 export default function Header(props: headerProps) {
-    return (
-        <View style={styles.header}>
-            <View style={styles.headerContainer}>
-                <View style={styles.upperHeader}>
-                <Image
-                    style={styles.logo}
-                    resizeMode='contain'
-                    source={require('./assets/logo.png')}
-                />
-                <Image
-                    style={styles.pfp}
-                    source={require('./assets/Suzumiya_Haruhi.jpg')}
-                />
-                </View>
+  const navigation = useNavigation()
+  return (
+      <View style={styles.header}>
+          <View style={styles.headerContainer}>
+              <View style={styles.upperHeader}>
+              <Image
+                  style={styles.logo}
+                  resizeMode='contain'
+                  source={require('./assets/logo.png')}
+              />
+              <Image
+                  style={styles.pfp}
+                  source={require('./assets/Suzumiya_Haruhi.jpg')}
+              />
+              </View>
+              {props.home &&
                 <View style={styles.searchBar}>
-                <AntDesign
-                    name='search1'
-                    size={14}
-                    color='#797979'  
-                />
-                <TextInput
-                    style={styles.searchInput}
-                    placeholder="search friends..."
-                />
+                  <AntDesign
+                      name='search1'
+                      size={14}
+                      color='#797979'  
+                  />
+                  <TextInput
+                      style={styles.searchInput}
+                      placeholder="search friends..."
+                  />
+              </View>
+              }
+              {!props.home &&
+                <View style={styles.backBar}>
+                  <TouchableOpacity
+                    style={styles.backArrow}
+                    onPress={() => {navigation.goBack()} }
+                  >
+                    <Ionicons name="arrow-back" size={24} color="#696969" />
+                  </TouchableOpacity>
+                  <Text style={styles.headerText}>{ props.title }</Text>
+                  <View style={styles.backArrow}/>
                 </View>
-            </View>
-        </View>
-    )
+              }
+          </View>
+      </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -92,5 +114,22 @@ const styles = StyleSheet.create({
       borderRadius: 40,
       width: 46,
       height: 46,
+    },
+    backBar: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
+      height: 24,
+    },
+    headerText: {
+      fontFamily: 'NunitoSans_400Regular',
+      fontSize: 20,
+      textAlign: 'center',
+      color: '#696969'
+    },
+    backArrow: {
+      height: '100%',
+      aspectRatio: 1,
     },
   });
