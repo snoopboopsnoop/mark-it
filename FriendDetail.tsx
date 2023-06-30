@@ -99,7 +99,7 @@ export default function FriendDetail() {
                     </View>
                 </View>
             </View>
-            {/* <View
+            <View
                 style={styles.scrollContainer}
                 onLayout={(event) => {
                 setHeight(event.nativeEvent.layout.height)
@@ -131,7 +131,7 @@ export default function FriendDetail() {
                     }
                 />
             </View>
-            <Footer/> */}
+            <Footer/>
         </View>
     )
 }
@@ -155,13 +155,11 @@ const styles = StyleSheet.create({
     },
     ellipsis: {
         height: 32,
-        
     },
     innerContainer: {
         flexGrow: 1,
         flexDirection: 'row',
         alignItems: 'flex-start',
-        backgroundColor: 'grey',
     },
     accContainer: {
         flexDirection: 'column',
@@ -169,7 +167,6 @@ const styles = StyleSheet.create({
         paddingRight: 16,
         width: '50%',
         height: '100%',
-        backgroundColor: 'grey',
     },
     pfp: {
         borderRadius: 10000,
