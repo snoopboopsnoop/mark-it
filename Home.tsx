@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import FriendDisplay from './Friend';
+import Footer from './Footer';
 
 interface User {
   username: string,
@@ -86,7 +87,6 @@ export default function Home() {
   return (  
     <View style={styles.container}>
       <StatusBar style="auto" />
-      
       <View
         style={styles.scrollContainer}
         onLayout={(event) => {
@@ -105,20 +105,7 @@ export default function Home() {
           }
         />
       </View>
-      <View style={styles.footer}>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => {
-              navigation.navigate('TransactionPage')
-            }}
-          >
-            <AntDesign
-              name="plus"
-              size={24}
-              color='#EFEFEF'
-            />
-          </TouchableOpacity>
-      </View>
+      <Footer/>
     </View>
   );
 }

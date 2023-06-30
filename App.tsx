@@ -20,10 +20,10 @@ export interface Friend {
   id: string,
 }
 
-interface Transaction {
+export interface Transaction {
   date: Date,
   note: string,
-  amount: number,
+  amount: string,
   id: string,
 }
 

@@ -72,6 +72,7 @@ const styles =  StyleSheet.create({
         fontFamily: 'NunitoSans_400Regular',
         fontSize: 12,
         textAlign: 'center',
+        color: '#696969'
     },
     moneyContainer: {
         flexDirection: 'column',
