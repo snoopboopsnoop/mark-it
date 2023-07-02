@@ -1,65 +1,90 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView, Image, TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { AntDesign }  from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 let degrees = '0deg';
 
 export default function TransactionPage() {
-const [isPaying, changePayer] = useState(false);
+    const [isPaying, changePayer] = useState(false);
+    const navigation = useNavigation();
 
     return (
-        <View style={styles.container}>
-            <View style={styles.mainContainer}>
-                <View style={styles.accContainer}>
-                    <Image
-                        style={styles.pfp}
-                        source={require('./assets/Suzumiya_Haruhi.jpg')}
-                    />
-                    <View style={styles.pfp}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                changePayer(!isPaying)
-                            }}
-                        >
-                            <Ionicons
-                            name="arrow-back"
-                            size={48}
-                            color='#696969'
-                            style={[{alignSelf: 'center', transform: [{rotate: (isPaying) ? '180deg' : '0deg' }] }]}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={[{width: '33%', aspectRatio: 1, alignItems: 'center', justifyContent: 'flex-end'}]}>
-                        <Image 
-                            style={[{width: '100%', height: undefined, aspectRatio: 1, borderRadius: 10000}]}
-                            source={require('./assets/bucket-gorilla.jpg')}
+        <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+            <View style={styles.container}>
+                <View style={styles.mainContainer}>
+                    <View style={styles.accContainer}>
+                        <Image
+                            style={styles.pfp}
+                            source={require('./assets/Suzumiya_Haruhi.jpg')}
                         />
-                        <TouchableOpacity
-                            style={styles.addButton}
-                            onPress={() => {
-                            }}
-                        >
-                            <AntDesign
-                            name="plus"
-                            size={24}
-                            color='#EFEFEF'
-                            style={[{alignSelf: 'center'}]}
+                        <View style={styles.pfp}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    changePayer(!isPaying)
+                                }}
+                            >
+                                <Ionicons
+                                name="arrow-back"
+                                size={48}
+                                color='#696969'
+                                style={[{alignSelf: 'center', transform: [{rotate: (isPaying) ? '180deg' : '0deg' }] }]}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[{width: '33%', aspectRatio: 1, alignItems: 'center', justifyContent: 'flex-end'}]}>
+                            <Image 
+                                style={[{width: '100%', height: undefined, aspectRatio: 1, borderRadius: 10000}]}
+                                source={require('./assets/bucket-gorilla.jpg')}
                             />
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.addButton}
+                                onPress={() => {
+                                }}
+                            >
+                                <AntDesign
+                                name="plus"
+                                size={24}
+                                color='#EFEFEF'
+                                style={[{alignSelf: 'center'}]}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={styles.amtContainer}>
+                        <Text style={styles.text}>Amount:</Text>
+                        <Text
+                            style={[styles.text, {fontSize: 69, color: '#28BC1B'}]}
+                        >
+                            +$12.00
+                        </Text>
+                    </View>
+                    <View
+                        style={styles.noteContainer}
+                    >
+                        <TextInput
+                            placeholder='Add note...'
+                            placeholderTextColor={'#696969'}
+                            style={styles.searchInput}
+                            multiline={ true }
+                            onEndEditing={() => { Keyboard.dismiss() }}
+                        />
                     </View>
                 </View>
-                <View style={styles.amtContainer}>
-
+                <View style={styles.footer}>
+                    <TouchableOpacity
+                        style={styles.sendButton}
+                        onPress={() => { navigation.goBack() }}
+                    >
+                        <Text style={styles.text}>Send</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.footer}>
-
-            </View>
-        </View>
-    )
-}
+        </TouchableWithoutFeedback>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -75,6 +100,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F6F6F6',
         paddingVertical: 28,
         paddingHorizontal: 26,
+        alignItems: 'center',
     },
     accContainer: {
         width: '100%',
@@ -105,11 +131,47 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     amtContainer: {
-        
+        width: '100%',
+        height: 140,
+        alignItems: 'center',
+    },
+    text: {
+        fontFamily: 'NunitoSans_400Regular',
+        fontSize: 24,
+        textAlign: 'center',
+        color: '#696969'
+    },
+    noteContainer: {
+        width: '90%',
+        height: 200,
+        backgroundColor: '#EFEFEF',
+        borderRadius: 13,
+        textAlign: 'left',
+        padding: 20,
+        paddingTop: 20,
+        textAlignVertical: 'top',
+    },
+    searchInput: {
+        fontFamily: 'NunitoSans_400Regular',
+        fontSize: 20,
+        color: '#696969',
+        width: '100%',
+        height: '100%',
+        textAlignVertical: 'top',
     },
     footer: {
         width: '100%',
         height: 138,
-        backgroundColor: '#efefef'
+        backgroundColor: '#efefef',
+        alignItems: 'center',
+    },
+    sendButton: {
+        height: '30%',
+        width: '25%',
+        backgroundColor: '#B0D3AA',
+        borderRadius: 13,
+        marginTop: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })

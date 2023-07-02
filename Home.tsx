@@ -9,6 +9,9 @@ import Footer from './Footer';
 
 interface User {
   username: string,
+  first_name: string,
+  last_name: string,
+  password: string,
   pfp: string,
 }
 

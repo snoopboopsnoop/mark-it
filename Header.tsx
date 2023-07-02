@@ -34,6 +34,7 @@ export default function Header(props: headerProps) {
                   <TextInput
                       style={styles.searchInput}
                       placeholder="search friends..."
+                      placeholderTextColor={'#797979'}
                   />
               </View>
               }
