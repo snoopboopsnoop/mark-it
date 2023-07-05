@@ -2,10 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, FlatList, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native';
 import { AntDesign }  from '@expo/vector-icons';
 import { useState } from 'react';
-import { Transaction } from './App';
+import { Transaction } from '../../App';
 
-import TransactionItem from './TransactionItem';
-import Footer from './Footer';
+import TransactionItem from '../Components/TransactionItem';
+import Footer from '../Components/Footer';
 
 
 const TRANSACTIONS:Transaction[] = [
@@ -80,7 +80,7 @@ export default function FriendDetail() {
                     <View style={styles.accContainer}>
                         <Image 
                             style={styles.pfp}
-                            source={require('./assets/bucket-gorilla.jpg')}
+                            source={require('../../assets/bucket-gorilla.jpg')}
                         />
                         <Text style={styles.accName}>
                             Desi

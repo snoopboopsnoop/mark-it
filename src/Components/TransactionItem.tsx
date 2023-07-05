@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, FlatList, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native';
 import { AntDesign }  from '@expo/vector-icons';
 import { useState } from 'react';
-import { Transaction } from './App';
+import { Transaction } from '../../App';
 
 type transactionsProps = {
     data: Transaction

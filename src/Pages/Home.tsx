@@ -4,8 +4,8 @@ import { AntDesign }  from '@expo/vector-icons';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-import FriendDisplay from './Friend';
-import Footer from './Footer';
+import FriendDisplay from '../Components/Friend';
+import Footer from '../Components/Footer';
 
 interface User {
   username: string,

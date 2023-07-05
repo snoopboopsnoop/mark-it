@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
-import { Friend } from './App';
+import { Friend } from '../../App';
 import { useNavigation } from '@react-navigation/native';
 
 type FriendDisplayProps = {
@@ -22,7 +22,7 @@ export default function FriendDisplay(props: FriendDisplayProps) {
                 <View style={styles.accContainer}>
                     <Image 
                         style={styles.pfp}
-                        source={require('./assets/bucket-gorilla.jpg')}
+                        source={require('../../assets/bucket-gorilla.jpg')}
                     />
                     <Text style={styles.accName}>
                         {props.friend.username}
