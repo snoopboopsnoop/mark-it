@@ -18,7 +18,7 @@ export default function TransactionPage() {
                     <View style={styles.accContainer}>
                         <Image
                             style={styles.pfp}
-                            source={require('../../assets/Suzumiya_Haruhi.jpg')}
+                            source={require('../assets/Suzumiya_Haruhi.jpg')}
                         />
                         <View style={styles.pfp}>
                             <TouchableOpacity
@@ -37,7 +37,7 @@ export default function TransactionPage() {
                         <View style={[{width: '33%', aspectRatio: 1, alignItems: 'center', justifyContent: 'flex-end'}]}>
                             <Image 
                                 style={[{width: '100%', height: undefined, aspectRatio: 1, borderRadius: 10000}]}
-                                source={require('../../assets/bucket-gorilla.jpg')}
+                                source={require('../assets/bucket-gorilla.jpg')}
                             />
                             <TouchableOpacity
                                 style={styles.addButton}

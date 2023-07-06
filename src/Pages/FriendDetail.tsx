@@ -80,7 +80,7 @@ export default function FriendDetail() {
                     <View style={styles.accContainer}>
                         <Image 
                             style={styles.pfp}
-                            source={require('../../assets/bucket-gorilla.jpg')}
+                            source={require('../assets/bucket-gorilla.jpg')}
                         />
                         <Text style={styles.accName}>
                             Desi

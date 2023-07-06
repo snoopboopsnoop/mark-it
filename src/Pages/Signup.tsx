@@ -6,7 +6,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 
 const auth = getAuth(app);
 
-export default function Login() {
+export default function Signup() {
     const [value, setValue] = useState({
         email: '',
         password: '',
@@ -25,13 +25,9 @@ export default function Login() {
             return;
         }
         
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, value.email, value.password);
-            navigation.navigate('Home')
-        }
-        catch(error: unknown) {
-            console.log(error.message);
-        }
+        console.log("cum")
+        const userCredential = await signInWithEmailAndPassword(auth, value.email, value.password);
+        console.log(userCredential.user);
 
     };
 

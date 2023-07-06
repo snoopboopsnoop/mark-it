@@ -17,11 +17,11 @@ export default function Header(props: headerProps) {
               <Image
                   style={styles.logo}
                   resizeMode='contain'
-                  source={require('../../assets/logo.png')}
+                  source={require('../assets/logo.png')}
               />
               <Image
                   style={styles.pfp}
-                  source={require('../../assets/Suzumiya_Haruhi.jpg')}
+                  source={require('../assets/Suzumiya_Haruhi.jpg')}
               />
               </View>
               {props.home &&

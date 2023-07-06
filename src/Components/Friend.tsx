@@ -22,7 +22,7 @@ export default function FriendDisplay(props: FriendDisplayProps) {
                 <View style={styles.accContainer}>
                     <Image 
                         style={styles.pfp}
-                        source={require('../../assets/bucket-gorilla.jpg')}
+                        source={require('../assets/bucket-gorilla.jpg')}
                     />
                     <Text style={styles.accName}>
                         {props.friend.username}
