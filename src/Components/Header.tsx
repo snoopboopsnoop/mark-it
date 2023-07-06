@@ -1,4 +1,5 @@
-import { StyleSheet, View, Image, TextInput, Text, TouchableOpacity } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, View, Image, TextInput, Text, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign }  from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -10,8 +11,17 @@ type headerProps = {
 
 export default function Header(props: headerProps) {
   const navigation = useNavigation()
+  const [modalVisible, setModal] = useState(false);
+
   return (
       <View style={styles.header}>
+          <Modal
+            visible={ modalVisible }  
+          >
+            <View style={styles.modal}>
+              <Text>real shit</Text>
+            </View>
+          </Modal>
           <View style={styles.headerContainer}>
               <View style={styles.upperHeader}>
               <Image
@@ -19,10 +29,15 @@ export default function Header(props: headerProps) {
                   resizeMode='contain'
                   source={require('../assets/logo.png')}
               />
-              <Image
-                  style={styles.pfp}
-                  source={require('../assets/Suzumiya_Haruhi.jpg')}
-              />
+              <TouchableOpacity style={styles.pfp}
+                onPress={() => { setModal(!modalVisible) }}
+              >
+                <Image
+                    style={styles.pfp}
+                    source={require('../assets/Suzumiya_Haruhi.jpg')}
+                />
+              </TouchableOpacity>
+              
               </View>
               {props.home &&
                 <View style={styles.searchBar}>
@@ -66,6 +81,21 @@ const styles = StyleSheet.create({
       paddingVertical: 18,
       backgroundColor: '#EFEFEF',
       alignItems: 'center',
+    },
+    modal: {
+      margin: 20,
+      backgroundColor: 'white',
+      borderRadius: 20,
+      padding: 35,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
     },
     headerContainer: {
       flex: 2,

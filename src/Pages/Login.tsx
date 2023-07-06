@@ -27,7 +27,6 @@ export default function Login() {
         
         try {
             const userCredential = await signInWithEmailAndPassword(auth, value.email, value.password);
-            navigation.navigate('Home')
         }
         catch(error: unknown) {
             console.log(error.message);
@@ -37,6 +36,7 @@ export default function Login() {
 
     return(
         <View style={styles.container}>
+            <Text style={styles.text}></Text>
             <TextInput
                 placeholder='username'
                 value={value.email}
