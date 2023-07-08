@@ -15,10 +15,14 @@ export default function AuthStack() {
                     name="Login"
                     component={ Login }
                     options={{
-                        headerShown: false 
+                        headerShown: true 
                     }}
                 />
-                <Stack.Screen name = "Signup" component = {Signup} />
+                <Stack.Screen
+                    name = "Signup"
+                    component = {Signup}
+                    options = {{ title: 'Make An Account' }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     )
