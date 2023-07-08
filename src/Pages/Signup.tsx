@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Text, StyleSheet, TextInput, Image } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, TextInput, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useState } from 'react';
 import { app, loginEmailPassword } from '../../firebase.config';
 import { useNavigation } from '@react-navigation/native';
@@ -19,91 +19,100 @@ export default function Signup() {
     const navigation = useNavigation();
 
     async function signUp() {
-        if(value.email == '' || value.password == '') {
+        if(value.email == '' || value.password == '' || value.firstName == '' || value.lastName == '' || value.username == '') {
             console.log("fuck")
             setValue({
                 ...value,
-                error: 'Email and password are mandatory.'
+                error: 'All inputs (except profile picture) are required.'
             })
 
             return;
         }
         
-        console.log("cum")
-        const userCredential = await signInWithEmailAndPassword(auth, value.email, value.password);
-        console.log(userCredential.user);
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, value.email, value.password);
+            navigation.navigate('Login')
+        } 
+        catch(error: unknown) {
+            setValue({ ...value, error: error.message})
+        }
 
     };
 
     return(
-        <View style={styles.container}>
-            <View style={styles.infoContainer}>
-                <View style={styles.innerContainer}>
-                    <View style={styles.accContainer}>
-                        <View style={[{justifyContent: 'flex-end'}]}>
-                            <Image 
-                                style={styles.pfp}
-                                source={require('../assets/bucket-gorilla.jpg')}
-                            />
-                            <TouchableOpacity
-                                style={styles.addButton}
-                                onPress={() => {
-                                }}
-                            >
-                                <AntDesign
-                                name="plus"
-                                size={24}
-                                color='#EFEFEF'
-                                style={[{alignSelf: 'center'}]}
+        <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+            <View style={styles.container}>
+                <View style={styles.infoContainer}>
+                    <View style={styles.innerContainer}>
+                        <View style={styles.accContainer}>
+                            <View style={[{justifyContent: 'flex-end'}]}>
+                                <Image 
+                                    style={styles.pfp}
+                                    source={require('../assets/bucket-gorilla.jpg')}
                                 />
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.addButton}
+                                    onPress={() => {
+                                    }}
+                                >
+                                    <AntDesign
+                                    name="plus"
+                                    size={24}
+                                    color='#EFEFEF'
+                                    style={[{alignSelf: 'center'}]}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                            <TextInput
+                                placeholder='Username'
+                                value={value.username}
+                                onChangeText={ (text) => setValue({ ...value, username: text}) }
+                                style={[styles.input, {height: '20%'}]}
+                            />
                         </View>
-                        <TextInput
-                            placeholder='Username'
-                            value={value.email}
-                            onChangeText={ (text) => setValue({ ...value, username: text}) }
-                            style={[styles.input, {height: '20%'}]}
-                        />
-                    </View>
-                    <View style={styles.signupContainer}>
-                        <TextInput
-                            placeholder='First Name'
-                            value={value.email}
-                            onChangeText={ (text) => setValue({ ...value, firstName: text }) }
-                            style={styles.input}
-                        />
-                        <TextInput
-                            placeholder='Last Name'
-                            value={value.email}
-                            onChangeText={ (text) => setValue({ ...value, lastName: text }) }
-                            style={styles.input}
-                        />
-                        <TextInput
-                            placeholder='Email Address'
-                            value={value.email}
-                            onChangeText={ (text) => setValue({ ...value, email: text }) }
-                            style={styles.input}
-                        />
-                        <TextInput
-                            placeholder='Password'
-                            value={value.password}
-                            onChangeText={ (text) => setValue({ ...value, password: text}) }
-                            secureTextEntry={ true }
-                            style={styles.input}
-                        />
+                        <View style={styles.signupContainer}>
+                            <TextInput
+                                placeholder='First Name'
+                                value={value.firstName}
+                                onChangeText={ (text) => setValue({ ...value, firstName: text }) }
+                                style={styles.input}
+                            />
+                            <TextInput
+                                placeholder='Last Name'
+                                value={value.lastName}
+                                onChangeText={ (text) => setValue({ ...value, lastName: text }) }
+                                style={styles.input}
+                            />
+                            <TextInput
+                                placeholder='Email Address'
+                                value={value.email}
+                                onChangeText={ (text) => setValue({ ...value, email: text }) }
+                                style={styles.input}
+                            />
+                            <TextInput
+                                placeholder='Password'
+                                value={value.password}
+                                onChangeText={ (text) => setValue({ ...value, password: text}) }
+                                secureTextEntry={ true }
+                                style={styles.input}
+                            />
+                        </View>
                     </View>
                 </View>
+                <TouchableOpacity
+                    style={styles.button}
+                    //onPress={() => { loginEmailPassword(value.email, value.password) }}
+                    onPress={ () => {
+                        setValue({ ...value, error: '' })
+                        signUp();
+                    }}
+                >
+                    <Text style={styles.text}>
+                        Sign Up
+                    </Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity
-                style={styles.button}
-                //onPress={() => { loginEmailPassword(value.email, value.password) }}
-                onPress={ signUp }
-            >
-                <Text style={styles.text}>
-                    Sign Up
-                </Text>
-            </TouchableOpacity>
-        </View>
+        </TouchableWithoutFeedback>
     );
 };
 

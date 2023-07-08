@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Text, StyleSheet, TextInput, Image } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, TextInput, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useState } from 'react';
 import { app, loginEmailPassword } from '../../firebase.config';
 import { useNavigation } from '@react-navigation/native';
@@ -14,7 +14,7 @@ export default function Login() {
     });
     const navigation = useNavigation();
 
-    async function signUp() {
+    async function signIn() {
         if(value.email == '' || value.password == '') {
             console.log("fuck")
             setValue({
@@ -27,53 +27,63 @@ export default function Login() {
         
         try {
             const userCredential = await signInWithEmailAndPassword(auth, value.email, value.password);
-        }
+        } 
         catch(error: unknown) {
-            console.log(error.message);
+            setValue({ ...value, error: "Incorrect Email or Password or servers down or some shit idfk"})
         }
 
     };
 
     return(
-        <View style={styles.container}>
-            <Text style={[styles.text, {fontSize: 24, height: undefined}]}> Welcome to Whopay! </Text>
-            <Image
-                style={styles.logo}
-                resizeMode='contain'
-                source={require('../assets/logo.png')}
-            />
-            <TextInput
-                placeholder='username'
-                value={value.email}
-                onChangeText={ (text) => setValue({ ...value, email: text }) }
-                style={styles.input}
-            />
-            <TextInput
-                placeholder='password'
-                value={value.password}
-                onChangeText={ (text) => setValue({ ...value, password: text}) }
-                secureTextEntry={ true }
-                style={styles.input}
-            />
-            <TouchableOpacity
-                style={styles.button}
-                //onPress={() => { loginEmailPassword(value.email, value.password) }}
-                onPress={ signUp }
-            >
-                <Text style={styles.text}>
-                    Sign In
-                </Text>
-            </TouchableOpacity>
-            <Text style={styles.text}>
-                Don't have an account?{' '}
-                <Text
-                    style={[styles.text, {color: '#0000FF'}]}
-                    onPress={()=>{ navigation.navigate('Signup') }}
+        <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+            <View style={styles.container}>
+                <Text style={[styles.text, {fontSize: 24, height: undefined}]}> Welcome to Whopay! </Text>
+                <Image
+                    style={styles.logo}
+                    resizeMode='contain'
+                    source={require('../assets/logo.png')}
+                />
+                <TextInput
+                    placeholder='Email'
+                    value={value.email}
+                    onChangeText={ (text) => setValue({ ...value, email: text }) }
+                    style={styles.input}
+                    autoCapitalize='none'
+                    autoCorrect={ false }
+                    autoComplete='email'
+                />
+                <TextInput
+                    placeholder='Password'
+                    value={value.password}
+                    onChangeText={ (text) => setValue({ ...value, password: text}) }
+                    secureTextEntry={ true }
+                    style={styles.input}
+                    autoCapitalize='none'
+                />
+                {value.error != '' && <Text style={styles.errorText}>{value.error}</Text>
+                }
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={ () => {
+                        setValue({ ...value, error: '' })
+                        signIn();
+                    }}
                 >
-                    Sign up
+                    <Text style={styles.text}>
+                        Sign In
+                    </Text>
+                </TouchableOpacity>
+                <Text style={styles.text}>
+                    Don't have an account?{' '}
+                    <Text
+                        style={[styles.text, {color: '#0000FF'}]}
+                        onPress={()=>{ navigation.navigate('Signup') }}
+                    >
+                        Sign up
+                    </Text>
                 </Text>
-            </Text>
-        </View>
+            </View>
+        </TouchableWithoutFeedback>
     );
 };
 
@@ -112,5 +122,10 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
         color: '#696969'
-      },
+    },
+    errorText: {
+        fontSize: 12,
+        width: '90%',
+        textAlign: 'center',
+    }
 });

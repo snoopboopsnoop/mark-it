@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, View, Image, TextInput, Text, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, View, Image, TextInput, Text, TouchableOpacity, Modal, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign }  from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -14,6 +14,7 @@ export default function Header(props: headerProps) {
   const [modalVisible, setModal] = useState(false);
 
   return (
+    <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
       <View style={styles.header}>
           <Modal
             visible={ modalVisible }  
@@ -30,7 +31,10 @@ export default function Header(props: headerProps) {
                   source={require('../assets/logo.png')}
               />
               <TouchableOpacity style={styles.pfp}
-                onPress={() => { navigation.openDrawer() }}
+                onPress={() => { 
+                  Keyboard.dismiss();
+                  navigation.openDrawer();
+                }}
               >
                 <Image
                     style={styles.pfp}
@@ -67,6 +71,7 @@ export default function Header(props: headerProps) {
               }
           </View>
       </View>
+    </TouchableWithoutFeedback>
   )
 }
 

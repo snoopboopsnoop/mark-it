@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, FlatList, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { AntDesign }  from '@expo/vector-icons';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -87,29 +87,31 @@ export default function Home() {
   const navigation = useNavigation()
 
   console.log(accHeight/5)
-  return (  
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <View
-        style={styles.scrollContainer}
-        onLayout={(event) => {
-          setHeight(event.nativeEvent.layout.height)
-        }}
-      >
-        <FlatList
-          style={styles.flatContainer}
-          data = {FRIENDS}
-          renderItem = {({ item, index }) =>
-              <FriendDisplay
-                friend = { item }
-                color = { (index % 2) ? '#EFEFEF' : '#F6F6F6' }
-                height = { accHeight/5 }
-              />
-          }
-        />
+  return (
+    <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <View
+          style={styles.scrollContainer}
+          onLayout={(event) => {
+            setHeight(event.nativeEvent.layout.height)
+          }}
+        >
+          <FlatList
+            style={styles.flatContainer}
+            data = {FRIENDS}
+            renderItem = {({ item, index }) =>
+                <FriendDisplay
+                  friend = { item }
+                  color = { (index % 2) ? '#EFEFEF' : '#F6F6F6' }
+                  height = { accHeight/5 }
+                />
+            }
+          />
+        </View>
+        <Footer/>
       </View>
-      <Footer/>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
