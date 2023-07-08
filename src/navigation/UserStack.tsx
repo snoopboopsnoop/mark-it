@@ -1,54 +1,34 @@
 import { useFonts, NunitoSans_400Regular } from '@expo-google-fonts/nunito-sans';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import Home from '../Pages/Home';
 import Header from '../Components/Header';
 import FriendDetail from '../Pages/FriendDetail';
 import TransactionPage from '../Pages/TransactionPage';
 import Login from '../Pages/Login';
+import HomeScreen from './HomeScreen';
+import { AccDrawer } from './AccDrawer';
 
-const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function UserStack() {
-
   return (  
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={ Home }
-          options={{
-            header: (props) =>
-              <Header
-                home={ true }
-                title={ 'Home' }
-              /> 
-          }}
+      <Drawer.Navigator
+        screenOptions={{
+          headerShown: false,
+          drawerPosition: 'right',
+          swipeEnabled: false,
+        }}
+      >  
+        <Drawer.Screen
+          name="HomeStack"
+          component={HomeScreen}
+          options={{drawerItemStyle:{display: 'none'}}}
         />
-        <Stack.Screen
-          name="FriendDetail"
-          component={ FriendDetail }
-          options={{
-            header: (props) =>
-              <Header
-                home={ false }
-                title={ 'Details' }
-              />  
-          }}
-        />
-        <Stack.Screen
-          name="TransactionPage"
-          component= { TransactionPage }
-          options={{
-            header: (props) =>
-              <Header
-                home={ false }
-                title={ 'New Transaction' }
-              /> 
-          }}
-        />
-      </Stack.Navigator>
+        <Drawer.Screen name="Log Out" component={Login}/>
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }

@@ -10,7 +10,7 @@ type headerProps = {
 }
 
 export default function Header(props: headerProps) {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const [modalVisible, setModal] = useState(false);
 
   return (
@@ -30,7 +30,7 @@ export default function Header(props: headerProps) {
                   source={require('../assets/logo.png')}
               />
               <TouchableOpacity style={styles.pfp}
-                onPress={() => { setModal(!modalVisible) }}
+                onPress={() => { navigation.openDrawer() }}
               >
                 <Image
                     style={styles.pfp}
