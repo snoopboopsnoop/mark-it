@@ -1,4 +1,5 @@
 import { useFonts, NunitoSans_400Regular } from '@expo-google-fonts/nunito-sans';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
@@ -8,7 +9,7 @@ import FriendDetail from '../Pages/FriendDetail';
 import TransactionPage from '../Pages/TransactionPage';
 import Login from '../Pages/Login';
 import HomeScreen from './HomeScreen';
-import { AccDrawer } from './AccDrawer';
+import LogoutButton from '../Components/LogoutButton';
 
 const Drawer = createDrawerNavigator();
 
@@ -20,15 +21,28 @@ export default function UserStack() {
           headerShown: false,
           drawerPosition: 'right',
           swipeEnabled: false,
+          drawerStyle: styles.container,
+          drawerType: 'front',
         }}
+        drawerContent={(props) => <LogoutButton/>}
       >  
         <Drawer.Screen
           name="HomeStack"
           component={HomeScreen}
           options={{drawerItemStyle:{display: 'none'}}}
         />
-        <Drawer.Screen name="Log Out" component={Login}/>
       </Drawer.Navigator>
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '70%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#efefef',
+
+  }
+})

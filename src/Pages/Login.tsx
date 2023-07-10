@@ -6,13 +6,12 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 
 const auth = getAuth(app);
 
-export default function Login() {
+export default function Login( { navigation }) {
     const [value, setValue] = useState({
         email: '',
         password: '',
         error: '',
     });
-    const navigation = useNavigation();
 
     async function signIn() {
         if(value.email == '' || value.password == '') {
@@ -36,6 +35,7 @@ export default function Login() {
 
     return(
         <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+            
             <View style={styles.container}>
                 <Text style={[styles.text, {fontSize: 24, height: undefined}]}> Welcome to Whopay! </Text>
                 <Image

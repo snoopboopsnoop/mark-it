@@ -3,7 +3,6 @@ import { useFonts, NunitoSans_400Regular } from '@expo-google-fonts/nunito-sans'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-
 import RootNavigation from './src/navigation/Index';
 
 interface User {
@@ -37,7 +36,7 @@ export default function App() {
       return null;
   }
 
-  return (  
+  return (
     <RootNavigation/>
   );
 }

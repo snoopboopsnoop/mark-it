@@ -6,8 +6,7 @@ import Home from '../Pages/Home';
 import Header from '../Components/Header';
 import FriendDetail from '../Pages/FriendDetail';
 import TransactionPage from '../Pages/TransactionPage';
-import Login from '../Pages/Login';
-import { AccDrawer } from './AccDrawer';
+import Settings from '../Pages/Settings';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +44,17 @@ export default function UserStack() {
               <Header
                 home={ false }
                 title={ 'New Transaction' }
+              /> 
+          }}
+        />
+        <Stack.Screen
+          name="Settings"
+          component= { Settings }
+          options={{
+            header: (props) =>
+              <Header
+                home={ false }
+                title={ 'Settings' }
               /> 
           }}
         />
