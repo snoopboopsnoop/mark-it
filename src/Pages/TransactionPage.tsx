@@ -1,14 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, SafeAreaView, Image, TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView, Image, TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
 import { AntDesign }  from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { FakeCurrencyInput } from 'react-native-currency-input';
 
 let degrees = '0deg';
 
 export default function TransactionPage() {
-    const [isPaying, changePayer] = useState(false);
+    const [isPaying, changePayer] = useState(true);
+    const [value, setValue] = useState(0.00);
     const navigation = useNavigation();
 
     return (
@@ -23,6 +25,7 @@ export default function TransactionPage() {
                         <View style={styles.pfp}>
                             <TouchableOpacity
                                 onPress={() => {
+                                    setValue(-value)
                                     changePayer(!isPaying)
                                 }}
                             >
@@ -55,11 +58,19 @@ export default function TransactionPage() {
                     </View>
                     <View style={styles.amtContainer}>
                         <Text style={styles.text}>Amount:</Text>
-                        <Text
-                            style={[styles.text, {fontSize: 69, color: '#28BC1B'}]}
-                        >
-                            +$12.00
-                        </Text>
+                        <FakeCurrencyInput
+                            keyboardType='number-pad'
+                            style={[styles.text, {fontSize: 69, color: (isPaying) ? '#28BC1B' : '#EE3B3B' }]}
+                            onChangeValue={value => setValue((((value > 0 && !isPaying)) ? -value : value) || 0)}
+                            maxValue={1000}
+                            minValue={-1000}
+                            prefix={"$"}
+                            separator='.'
+                            delimiter=','
+                            value={value}
+                            showPositiveSign={value != 0 ? true : false}
+                            signPosition='beforePrefix'
+                        />
                     </View>
                     <View
                         style={styles.noteContainer}
@@ -148,8 +159,8 @@ const styles = StyleSheet.create({
         borderRadius: 13,
         textAlign: 'left',
         padding: 20,
-        paddingTop: 20,
         textAlignVertical: 'top',
+        top: 20,
     },
     searchInput: {
         fontFamily: 'NunitoSans_400Regular',
