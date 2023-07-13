@@ -1,9 +1,11 @@
 import { View, TouchableOpacity, Text, StyleSheet, TextInput, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useState } from 'react';
-import { app, loginEmailPassword } from '../../firebase.config';
+import { app } from '../../firebase.config';
 import { useNavigation } from '@react-navigation/native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
 import { AntDesign } from '@expo/vector-icons';
+
+import { registration } from '../../firebase.config';
 
 const auth = getAuth(app);
 
@@ -30,7 +32,7 @@ export default function Signup() {
         }
         
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, value.email, value.password);
+            await registration(value.email, value.password, value.firstName, value.lastName, value.username);
             navigation.navigate('Login')
         } 
         catch(error: unknown) {
@@ -99,6 +101,8 @@ export default function Signup() {
                         </View>
                     </View>
                 </View>
+                {value.error != '' && <Text style={styles.errorText}>{value.error}</Text>
+                }
                 <TouchableOpacity
                     style={styles.button}
                     //onPress={() => { loginEmailPassword(value.email, value.password) }}
@@ -201,4 +205,9 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         justifyContent: 'center',
     },
+    errorText: {
+        fontSize: 12,
+        width: '90%',
+        textAlign: 'center',
+    }
 });
