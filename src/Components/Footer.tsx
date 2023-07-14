@@ -7,6 +7,7 @@ export default function Footer() {
 
     return (
         <View style={styles.footer}>
+          {/* <View style={[styles.addButton, {borderRadius: 0, backgroundColor: 'transparent'}]}/> */}
           <TouchableOpacity
             style={styles.addButton}
             onPress={() => {
@@ -19,6 +20,18 @@ export default function Footer() {
               color='#EFEFEF'
             />
           </TouchableOpacity>
+          {/* <TouchableOpacity
+            style={[styles.addButton, {borderRadius: 0, backgroundColor: 'transparent'}]}
+            onPress={() => {
+              navigation.navigate('Friends')
+            }}
+          >
+            <AntDesign
+              name="adduser"
+              size={30}
+              color='#696969'
+            />
+          </TouchableOpacity> */}
       </View>
     )
 }
@@ -28,8 +41,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 92,
         backgroundColor: '#EFEFEF',
-        alignItems: 'center',
-        paddingTop: 10,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingTop: 15,
+        gap: 40,
       },
       addButton: {
         borderRadius: 40,

@@ -7,6 +7,7 @@ import Header from '../Components/Header';
 import FriendDetail from '../Pages/FriendDetail';
 import TransactionPage from '../Pages/TransactionPage';
 import Settings from '../Pages/Settings';
+import Friends from '../Pages/Friends';
 
 const Stack = createNativeStackNavigator();
 
@@ -55,6 +56,17 @@ export default function UserStack() {
               <Header
                 home={ false }
                 title={ 'Settings' }
+              /> 
+          }}
+        />
+        <Stack.Screen
+          name="Friends"
+          component= { Friends }
+          options={{
+            header: (props) =>
+              <Header
+                home={ false }
+                title={ 'Add Friends' }
               /> 
           }}
         />

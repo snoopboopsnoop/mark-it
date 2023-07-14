@@ -3,6 +3,7 @@ import { StyleSheet, View, FlatList, TouchableOpacity, TouchableWithoutFeedback,
 import { AntDesign }  from '@expo/vector-icons';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { getFriends } from '../../firebase.config';
 
 import FriendDisplay from '../Components/Friend';
 import Footer from '../Components/Footer';
@@ -86,7 +87,8 @@ export default function Home() {
   const [ accHeight, setHeight ] = useState(0)
   const navigation = useNavigation()
 
-  console.log(accHeight/5)
+  getFriends();
+
   return (
     <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
       <View style={styles.container}>

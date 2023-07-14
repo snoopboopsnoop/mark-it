@@ -25,23 +25,37 @@ export default function Header(props: headerProps) {
           </Modal>
           <View style={styles.headerContainer}>
               <View style={styles.upperHeader}>
-              <Image
-                  style={styles.logo}
-                  resizeMode='contain'
-                  source={require('../assets/logo.png')}
-              />
-              <TouchableOpacity style={styles.pfp}
-                onPress={() => { 
-                  Keyboard.dismiss();
-                  navigation.openDrawer();
-                }}
-              >
                 <Image
-                    style={styles.pfp}
-                    source={require('../assets/Suzumiya_Haruhi.jpg')}
+                    style={styles.logo}
+                    resizeMode='contain'
+                    source={require('../assets/logo.png')}
                 />
-              </TouchableOpacity>
-              
+                <View style={styles.buttonHeader}>
+                  {props.home && <TouchableOpacity
+                      style={[styles.friendButton]}
+                      onPress={() => {
+                        navigation.navigate('Friends')
+                      }}
+                    >
+                      <AntDesign
+                        name="adduser"
+                        size={30}
+                        color='#696969'
+                      />
+                  </TouchableOpacity>
+                  }
+                  <TouchableOpacity style={styles.pfp}
+                    onPress={() => { 
+                      Keyboard.dismiss();
+                      navigation.openDrawer();
+                    }}
+                  >
+                    <Image
+                        style={styles.pfp}
+                        source={require('../assets/Suzumiya_Haruhi.jpg')}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
               {props.home &&
                 <View style={styles.searchBar}>
@@ -168,4 +182,13 @@ const styles = StyleSheet.create({
       height: '100%',
       aspectRatio: 1,
     },
+    friendButton: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonHeader: {
+      flexDirection: 'row',
+      gap: 10,
+      alignItems: 'flex-end',
+    }
   });

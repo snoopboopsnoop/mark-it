@@ -90,6 +90,9 @@ export default function Signup() {
                                 value={value.email}
                                 onChangeText={ (text) => setValue({ ...value, email: text }) }
                                 style={styles.input}
+                                autoCapitalize='none'
+                                autoCorrect={ false }
+                                autoComplete='email'
                             />
                             <TextInput
                                 placeholder='Password'
@@ -97,6 +100,7 @@ export default function Signup() {
                                 onChangeText={ (text) => setValue({ ...value, password: text}) }
                                 secureTextEntry={ true }
                                 style={styles.input}
+                                autoCapitalize='none'
                             />
                         </View>
                     </View>

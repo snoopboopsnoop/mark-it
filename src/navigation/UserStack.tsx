@@ -3,11 +3,6 @@ import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import Home from '../Pages/Home';
-import Header from '../Components/Header';
-import FriendDetail from '../Pages/FriendDetail';
-import TransactionPage from '../Pages/TransactionPage';
-import Login from '../Pages/Login';
 import HomeScreen from './HomeScreen';
 import LogoutButton from '../Components/LogoutButton';
 
@@ -22,7 +17,6 @@ export default function UserStack() {
           drawerPosition: 'right',
           swipeEnabled: false,
           drawerStyle: styles.container,
-          drawerType: 'front',
         }}
         drawerContent={(props) => <LogoutButton/>}
       >  
