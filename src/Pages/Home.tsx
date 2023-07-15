@@ -1,9 +1,11 @@
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, FlatList, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, View, FlatList, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Text } from 'react-native';
 import { AntDesign }  from '@expo/vector-icons';
-import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { getFriends } from '../../firebase.config';
+import { Friend } from '../../App';
+import { useAuthentication } from '../utils/hooks/useAuthentication';
 
 import FriendDisplay from '../Components/Friend';
 import Footer from '../Components/Footer';
@@ -14,14 +16,6 @@ interface User {
   last_name: string,
   password: string,
   pfp: string,
-}
-
-export interface Friend {
-  username: string,
-  pfp: string,
-  balance: string,
-  lastTransaction: Date, 
-  id: string,
 }
 
 interface Transaction {
@@ -35,59 +29,105 @@ const FRIENDS:Friend[] = [
   {
     username: 'Desi',
     pfp: '../assets/bucket-gorilla.jpg',
-    balance: '50.25',
+    balance: 50.25,
     lastTransaction: new Date(),
-    id: '1293812032173',
   },
-  {
-    username: 'Desi',
-    pfp: '../assets/bucket-gorilla.jpg',
-    balance: '0.25',
-    lastTransaction: new Date(),
-    id: '183743120493184',
-  },
-  {
-    username: 'Desi',
-    pfp: '../assets/bucket-gorilla.jpg',
-    balance: '0.00',
-    lastTransaction: new Date(),
-    id: '130987541087953',
-  },
-  {
-    username: 'Desi',
-    pfp: '../assets/bucket-gorilla.jpg',
-    balance: '-4.50',
-    lastTransaction: new Date(),
-    id: '1235784510232443213',
-  },
-  {
-    username: 'Desi',
-    pfp: '../assets/bucket-gorilla.jpg',
-    balance: '50.25',
-    lastTransaction: new Date(),
-    id: '1234957120348',
-  },
-  {
-    username: 'Desi',
-    pfp: '../assets/bucket-gorilla.jpg',
-    balance: '50.25',
-    lastTransaction: new Date(),
-    id: '2134972391041314243',
-  },
-  {
-    username: 'Desi',
-    pfp: '../assets/bucket-gorilla.jpg',
-    balance: '50.25',
-    lastTransaction: new Date(),
-    id: '1234781324983120',
-  },
+  // {
+  //   username: 'Desi',
+  //   pfp: '../assets/bucket-gorilla.jpg',
+  //   balance: '0.25',
+  //   lastTransaction: new Date(),
+  // },
+  // {
+  //   username: 'Desi',
+  //   pfp: '../assets/bucket-gorilla.jpg',
+  //   balance: '0.00',
+  //   lastTransaction: new Date(),
+  // },
+  // {
+  //   username: 'Desi',
+  //   pfp: '../assets/bucket-gorilla.jpg',
+  //   balance: '-4.50',
+  //   lastTransaction: new Date(),
+  // },
+  // {
+  //   username: 'Desi',
+  //   pfp: '../assets/bucket-gorilla.jpg',
+  //   balance: '50.25',
+  //   lastTransaction: new Date(),
+  // },
+  // {
+  //   username: 'Desi',
+  //   pfp: '../assets/bucket-gorilla.jpg',
+  //   balance: '50.25',
+  //   lastTransaction: new Date(),
+  // },
+  // {
+  //   username: 'Desi',
+  //   pfp: '../assets/bucket-gorilla.jpg',
+  //   balance: '50.25',
+  //   lastTransaction: new Date(),
+  // },
 ];
 
-export default function Home() {
-  const [ accHeight, setHeight ] = useState(0)
-  const navigation = useNavigation()
+// async function loadFriends(friends:Friend[]) {
+//   console.log(friends);
+//   await getFriends(friends);
+//   console.log(friends); 
+//   friends.forEach((entry) => {
+//     console.log("e")
+//     console.log(entry);
+//   })
+// }
 
-  getFriends();
+const defaultFriend:Friend[] = [
+  {
+    username: 'unknown',
+    pfp: '../assets/bucket-gorilla.jpg',
+    balance: 0,
+    lastTransaction: new Date(),
+  },
+]
+
+export default function Home() {
+  const [ accHeight, setHeight ] = useState(0);
+  const [ friends, setFriends ] = useState<Friend[]>([]);
+  const [ refresh, setRefresh ] = useState(false);
+
+  const navigation = useNavigation();
+  const isFocused = navigation.isFocused();
+
+  async function refreshFriends() {
+    let data:Friend[] = await getFriends();
+    setFriends(data);
+    console.log("printing inside refresh")
+    friends.forEach((entry) => {
+      console.log(entry);
+    })
+  }
+
+  useEffect(() => {
+    async function refreshEffect() {
+      await refreshFriends();
+    }
+    
+    if(isFocused) {
+      refreshEffect();
+    }
+  }, [])
+
+  // function emptyComponent() {
+  //   return(
+  //     <View>
+  //       <Text>No Friends?</Text>
+  //     </View>
+  //   )
+  // }
+
+  console.log("printing at render")
+  friends.forEach((entry) => {
+    console.log(entry);
+  })
 
   return (
     <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
@@ -100,15 +140,18 @@ export default function Home() {
           }}
         >
           <FlatList
-            style={styles.flatContainer}
-            data = {FRIENDS}
-            renderItem = {({ item, index }) =>
+            onRefresh={ refreshFriends }
+            refreshing = { refresh }
+            style={styles.flatContainer}  
+            data = { friends }
+            // ListEmptyComponent={ emptyComponent }
+            renderItem = {({ item, index }) => (
                 <FriendDisplay
                   friend = { item }
                   color = { (index % 2) ? '#EFEFEF' : '#F6F6F6' }
                   height = { accHeight/5 }
                 />
-            }
+            )}
           />
         </View>
         <Footer/>

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, FlatList, SafeAreaView, Image, TextInput, Touch
 import { AntDesign }  from '@expo/vector-icons';
 import { useState } from 'react';
 import { Transaction } from '../../App';
+import { useRoute } from '@react-navigation/native';
 
 import TransactionItem from '../Components/TransactionItem';
 import Footer from '../Components/Footer';
@@ -67,6 +68,8 @@ const TRANSACTIONS:Transaction[] = [
 
 export default function FriendDetail() {
     const [ accHeight, setHeight ] = useState(0)
+    const route = useRoute();
+    const friend = route.params?.friendData;
 
     return (
         <View style={styles.container}>
@@ -83,7 +86,7 @@ export default function FriendDetail() {
                             source={require('../assets/bucket-gorilla.jpg')}
                         />
                         <Text style={styles.accName}>
-                            Desi
+                            {friend.username}
                         </Text>
                     </View>
                     <View style={styles.moneyContainer}>

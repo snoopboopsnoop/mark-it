@@ -15,7 +15,7 @@ export default function FriendDisplay(props: FriendDisplayProps) {
         <TouchableHighlight
             style={{backgroundColor: (props.color == '#EFEFEF') ? '#F6F6F6' : '#EFEFEF' }}
             onPress={ () =>
-                navigation.navigate('FriendDetail')
+                navigation.navigate('FriendDetail', { friendData: props.friend })
             }
         >
             <View style={[styles.container, {backgroundColor: props.color, height: (props.height < 70) ? 70 : props.height}]}>
@@ -31,9 +31,9 @@ export default function FriendDisplay(props: FriendDisplayProps) {
                 <View style={styles.moneyContainer}>
                     <Text style={[
                             styles.balanceText,
-                            {color: (Number(props.friend.balance) == 0) ? '#9F9F9F' : (Number(props.friend.balance) > 0) ? '#28BC1B' : '#EE3B3B'}
+                            {color: (props.friend.balance == 0) ? '#9F9F9F' : (props.friend.balance > 0) ? '#28BC1B' : '#EE3B3B'}
                             ]}>
-                        ${(Number(props.friend.balance) < 0) ? props.friend.balance.slice(1) : props.friend.balance}
+                        {props.friend.balance < 0 ? '-' : ''}${Math.abs(props.friend.balance).toFixed(2)}
                     </Text>
                     <Text style={styles.lastTransText}>
                         Last transaction:{' '}

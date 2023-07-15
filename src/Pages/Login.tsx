@@ -2,9 +2,7 @@ import { View, TouchableOpacity, Text, StyleSheet, TextInput, Image, TouchableWi
 import { useState } from 'react';
 import { app, loginEmailPassword } from '../../firebase.config';
 import { useNavigation } from '@react-navigation/native';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
-
-const auth = getAuth(app);
+import { login } from '../../firebase.config';
 
 export default function Login( { navigation }) {
     const [value, setValue] = useState({
@@ -25,7 +23,8 @@ export default function Login( { navigation }) {
         }
         
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, value.email, value.password);
+            const userCredential = await login(value.email, value.password);
+            
         } 
         catch(error: unknown) {
             setValue({ ...value, error: "Incorrect Email or Password or servers down or some shit idfk"})

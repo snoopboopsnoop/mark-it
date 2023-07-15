@@ -13,9 +13,8 @@ interface User {
 export interface Friend {
   username: string,
   pfp: string,
-  balance: string,
+  balance: number,
   lastTransaction: Date, 
-  id: string,
 }
 
 export interface Transaction {
