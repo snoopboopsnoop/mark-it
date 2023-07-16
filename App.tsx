@@ -19,11 +19,12 @@ export interface Friend {
 }
 
 export interface Transaction {
-  amount: string,
+  amount: Number,
   date: Date,
   debt: string,
   note: string,
   paid: string,
+  id: string,
 }
 
 const Stack = createNativeStackNavigator();

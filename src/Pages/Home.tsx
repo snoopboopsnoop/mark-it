@@ -18,13 +18,6 @@ interface User {
   pfp: string,
 }
 
-interface Transaction {
-  date: Date,
-  note: string,
-  amount: number,
-  id: string,
-}
-
 const FRIENDS:Friend[] = [
   {
     username: 'Desi',

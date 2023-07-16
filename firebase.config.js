@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, query, orderBy, limit, collection, getDocs, getDoc, where, or, and, addDoc, toDate, } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, query, orderBy, limit, collection, getDocs, getDoc, where, or, and, addDoc, } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
 import Constants from 'expo-constants';
@@ -43,7 +43,9 @@ export async function login(email, password) {
 }
 
 export async function getTransactions(friendUID) {
+    console.log('transaction function')
     const user = auth.currentUser;
+    console.log("user created")
     const q = query(transactions, or(
         and(
             where('debt', '==', friendUID),
@@ -55,12 +57,33 @@ export async function getTransactions(friendUID) {
         )
     ));
     const querySnapshot = await getDocs(q);
+    console.log("snapshot")
+    console.log(querySnapshot)
 
+    let transactionArray = [];
+    
     querySnapshot.forEach((document) => {
         console.log(document.id, ' => ' , document.data());
+        const data = document.data();
+        console.log("date")
+        console.log(data.date)
+        console.log(data.date.toDate())
+        transactionArray.push({
+            amount: data.amount,
+            date: data.date.toDate(),
+            debt: data.debt,
+            note: data.note,
+            paid: data.paid,
+            id: document.id,
+        });
     })
+
+    console.log("trans inside func")
+    console.log(transactionArray)
     
+    return transactionArray
 }
+
 
 export async function sendTransaction(value) {
     const user = auth.currentUser;
@@ -89,7 +112,6 @@ export async function getFriends() {
 
     let friends = [];
     console.log("for loop")
-    // for (document of querySnapshot) {
     querySnapshot.forEach((document) => {
         // console.log(document.id, " => ", document.data());
         const data = document.data();
@@ -100,21 +122,7 @@ export async function getFriends() {
             uid: friendUID,
             balance: (first) ? data.balance : -data.balance,
         });
-
-        // friends.push({
-        //     username: friend.username,
-        //     pfp: '../assets/bucket-gorilla.jpg',
-        //     balance: (first) ? data.balance : -data.balance,
-        //     lastTransaction: new Date(),
-        //     uid: friendUID,
-        // })
-
-        // console.log("printing entries inside getFriend");
-        // friends.forEach((entry) => {
-        //     console.log(entry);
-        // })
     });
-    // }
 
     console.log("friends inside func")
     console.log(friends)

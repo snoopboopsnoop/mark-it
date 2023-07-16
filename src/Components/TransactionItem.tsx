@@ -7,7 +7,7 @@ import { Transaction } from '../../App';
 type transactionsProps = {
     data: Transaction
     color: string,
-    height: number,
+    height: Number,
 }
 
 export default function TransactionItem(props: transactionsProps) {
@@ -17,13 +17,13 @@ export default function TransactionItem(props: transactionsProps) {
                 <Text style={[styles.text, {width: '30%'}]}>
                     {props.data.date.getMonth()+1}/{props.data.date.getDate()}/{props.data.date.getFullYear()%100}
                 </Text>
-                <Text style={[styles.text, {width: '50%', paddingRight: 45}]}>
+                <Text style={[styles.text, {width: '45%', paddingRight: 45}]}>
                     {props.data.note}
                 </Text>
-                <Text style={[styles.text, {width: '20%', color: (Number(props.data.amount) == 0) ? '#9F9F9F' : (Number(props.data.amount) > 0) ? '#28BC1B' : '#EE3B3B'}]}>
-                    {(Number(props.data.amount) < 0) ? '-' : '+'}
+                <Text style={[styles.text, {width: '25%', color: (props.data.amount == 0) ? '#9F9F9F' : (props.data.amount > 0) ? '#28BC1B' : '#EE3B3B'}]}>
+                    {(props.data.amount < 0) ? '-' : '+'}
                     $
-                    {(Number(props.data.amount) < 0) ? props.data.amount.slice(1) : props.data.amount}
+                    {Math.abs(props.data.amount)}
                 </Text>
             </View>
         </View>

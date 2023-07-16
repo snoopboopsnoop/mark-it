@@ -11,70 +11,23 @@ import { getTransactions } from '../../firebase.config';
 
 
 const TRANSACTIONS:Transaction[] = [
-    {
-        date: new Date(),
-        note: "bobr",
-        amount: '-5.90',
-        id: '213812372193812',
-    },
-    {
-        date: new Date(),
-        note: "adfjhafadjlkfjadlkfjalknfelakfjhdalkfjalkejfalkedj",
-        amount: '14.50',
-        id: '14312431241324',
-    },
-    {
-        date: new Date(),
-        note: "bobr",
-        amount: '-7.80',
-        id: '1345134643163',
-    },
-    {
-        date: new Date(),
-        note: "bobr",
-        amount: '40.00',
-        id: '21341255363156',
-    },
-    {
-        date: new Date(),
-        note: "bobr",
-        amount: '-5.90',
-        id: '1234314614351252',
-    },
-    {
-        date: new Date(),
-        note: "bobr",
-        amount: '-5.90',
-        id: '2345642572562456',
-    },
-    {
-        date: new Date(),
-        note: "bobr",
-        amount: '-5.90',
-        id: '1355427652472',
-    },
-    {
-        date: new Date(),
-        note: "bobr",
-        amount: '-5.90',
-        id: '1324534575246746',
-    },
-    {
-        date: new Date(),
-        note: "bobr",
-        amount: '-5.90',
-        id: '13454257562372',
-    },
+    
 ]
 
 export default function FriendDetail() {
     const [ accHeight, setHeight ] = useState(0)
-    const [ transactions, setTransactions ] = useState([]);
+    const [ transactions, setTransactions ] = useState<Transaction[]>([]);
     const route = useRoute();
     const friend = route.params?.friendData;
 
     async function refreshTransactions() {
-        await getTransactions(friend.uid);
+        console.log("refresh transactions")
+        const data:Transaction[] = await getTransactions(friend.uid);
+        console.log('data')
+        console.log(data);
+        setTransactions(data);
+        console.log('transactions')
+        console.log(transactions)
     }
 
     useEffect(() => {
@@ -125,16 +78,16 @@ export default function FriendDetail() {
                     <Text style={[styles.text, {textDecorationLine: 'underline', width: '30%'}]}>
                         Date
                     </Text>
-                    <Text style={[styles.text, {textDecorationLine: 'underline', width: '50%'}]}>
+                    <Text style={[styles.text, {textDecorationLine: 'underline', width: '45%'}]}>
                         Note
                     </Text>
-                    <Text style={[styles.text, {textDecorationLine: 'underline', width: '20%'}]}>
+                    <Text style={[styles.text, {textDecorationLine: 'underline', width: '25%'}]}>
                         Amount
                     </Text>
                 </View>
                 <FlatList
                     style={styles.flatContainer}
-                    data = {transactions}
+                    data = { transactions }
                     renderItem = {({ item, index }) =>
                         <TransactionItem
                             data = { item }
