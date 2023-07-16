@@ -21,8 +21,8 @@ export default function Login( { navigation }) {
         }
         
         try {
-            const userCredential = await login(value.email, value.password);
-            
+            await login(value.email, value.password);
+            return;
         } 
         catch(error: unknown) {
             setValue({ ...value, error: "Incorrect Email or Password or servers down or some shit idfk"})

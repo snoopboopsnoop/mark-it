@@ -10,6 +10,7 @@ export function useAuthentication() {
     React.useEffect(() => {
         const unsubscribeFromAuthStatusChanged = onAuthStateChanged(auth, (user) => {
             if(user) {
+                console.log("not set user");
                 setUser(user);
                 console.log("set user");
             }
@@ -21,5 +22,5 @@ export function useAuthentication() {
         return unsubscribeFromAuthStatusChanged;
     }, []);
 
-    return { user };
+    return { user} ;
 }

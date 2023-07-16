@@ -1,8 +1,8 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, query, orderBy, limit, collection, getDocs, getDoc, where, or, and, addDoc, toDate } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, query, orderBy, limit, collection, getDocs, getDoc, where, or, and, addDoc, toDate, } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+
 import Constants from 'expo-constants';
-import FriendDetail from './src/Pages/FriendDetail';
 
 const firebaseConfig = {
     apiKey: Constants.manifest?.extra?.firebaseApiKey,
@@ -84,56 +84,57 @@ export async function getFriends() {
         where('friend2', '==', user.uid),
         ));
     const querySnapshot = await getDocs(q);
+    console.log("snapshot: ")
+    console.log(querySnapshot)
 
     let friends = [];
-    querySnapshot.forEach(async (document) => {
+    console.log("for loop")
+    // for (document of querySnapshot) {
+    querySnapshot.forEach((document) => {
         // console.log(document.id, " => ", document.data());
         const data = document.data();
         const first = (data.friend1 == user.uid) ? true : false;
         const friendUID = (first) ? data.friend2 : data.friend1;
-        console.log("friendUID: ", friendUID)
-        // await getFriendData(friendUID)
-        //     .then((friend) => {
-        //         console.log("friend: ")
-        //         console.log(friend)
-        //         friends.push({
-        //             username: friend.username,
-        //             pfp: '../assets/bucket-gorilla.jpg',
-        //             balance: (first) ? data.balance : -data.balance,
-        //             lastTransaction: new Date(),
-        //         })
-        //     })
-        await getDoc(doc(db, "users", friendUID))
-        .then((friendData) => {
-            console.log("doc")
-            console.log(friendData.data())
-            const friend = friendData.data();
-            friends.push({
-                username: friend.username,
-                pfp: '../assets/bucket-gorilla.jpg',
-                balance: (first) ? data.balance : -data.balance,
-                lastTransaction: new Date(),
-                uid: friendUID,
-            })
-        })
 
-        console.log("printing entries inside getFriend");
-        friends.forEach((entry) => {
-            console.log(entry);
-        })
+        friends.push({
+            uid: friendUID,
+            balance: (first) ? data.balance : -data.balance,
+        });
+
+        // friends.push({
+        //     username: friend.username,
+        //     pfp: '../assets/bucket-gorilla.jpg',
+        //     balance: (first) ? data.balance : -data.balance,
+        //     lastTransaction: new Date(),
+        //     uid: friendUID,
+        // })
+
+        // console.log("printing entries inside getFriend");
+        // friends.forEach((entry) => {
+        //     console.log(entry);
+        // })
     });
+    // }
 
+    console.log("friends inside func")
+    console.log(friends)
+    
     return friends;
 }
 
-export async function getFriendData( friendUID ) {
-    console.log("friend data uid: ", friendUID)
-    await getDoc(doc(db, "users", friendUID))
-        .then((data) => {
-            console.log("doc")
-            console.log(data.data())
-            return data.data()
-        })
+export async function getFriendData( entry ) {
+    console.log("friend data uid: ", entry.uid)
+    const data = await getDoc(doc(db, "users", entry.uid))
+    const friend = data.data();
+    // console.log("data")
+    // console.log(data.data());
+    return {
+        username: friend.username,
+        pfp: '../assets/bucket-gorilla.jpg',
+        balance: entry.balance,
+        lastTransaction: new Date(),
+        uid: entry.uid,
+    };
 }
 
 export { app };

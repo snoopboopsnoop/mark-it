@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, FlatList, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Text } from 'react-native';
 import { AntDesign }  from '@expo/vector-icons';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { getFriends } from '../../firebase.config';
+import { getFriends, getFriendData } from '../../firebase.config';
 import { Friend } from '../../App';
 import { useAuthentication } from '../utils/hooks/useAuthentication';
 
@@ -95,59 +95,40 @@ export default function Home() {
   const [ accHeight, setHeight ] = useState(0);
   const [ friends, setFriends ] = useState<Friend[]>([]);
   const [ refresh, setRefresh ] = useState(false);
-
   const navigation = useNavigation();
+
   const isFocused = navigation.isFocused();
 
   async function refreshFriends() {
-    console.log("refreshFriends called");
-    console.log("before refresh")
-    friends.forEach((entry) => {
-      console.log(entry);
-    })
-    await getFriends()
-      .then((data) =>  {
-        console.log("data: ")
-        console.log(data);
-        setFriends(data)
-      });
-    console.log("printing inside refresh")
-    console.log("after refresh")
-    friends.forEach((entry) => {
-      console.log(entry);
-    })
+    try {
+      setFriends([]);
+      const data:Friend[] = await getFriends();
+      for(const entry of data) {
+        const friend = await getFriendData(entry);
+        console.log("friend")
+        console.log(friend);
+        setFriends(friends => [...friends, friend]);
+      }
+    }
+    catch(error) {
+      console.error(error)
+    }
   }
 
   useEffect(() => {
-    console.log("useeffect")
-    async function refreshEvent() {
-      console.log('refresh event called')
-      await refreshFriends();
-      console.log('refresh event over');
+    if(isFocused) {
+      console.log('focused')
+      refreshFriends();
     }
-    refreshEvent();
+  }, [isFocused]);
 
-  }, [accHeight]);
-
-  // useEffect(() => {
-  //   if(isFocused) {
-  //     console.log('focused')
-  //     refreshFriends();
-  //   }
-  // }, [isFocused]);
-
-  // function emptyComponent() {
-  //   return(
-  //     <View>
-  //       <Text>No Friends?</Text>
-  //     </View>
-  //   )
-  // }
 
   console.log("printing at render")
-  friends.forEach((entry) => {
+  console.log(friends)
+  for (const entry of friends) {
+    console.log("entry:")
     console.log(entry);
-  })
+  }
   console.log("render called");
 
   return (
