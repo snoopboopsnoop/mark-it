@@ -15,13 +15,15 @@ export interface Friend {
   pfp: string,
   balance: number,
   lastTransaction: Date, 
+  uid: string,
 }
 
 export interface Transaction {
-  date: Date,
-  note: string,
   amount: string,
-  id: string,
+  date: Date,
+  debt: string,
+  note: string,
+  paid: string,
 }
 
 const Stack = createNativeStackNavigator();

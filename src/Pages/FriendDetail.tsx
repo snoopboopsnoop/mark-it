@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, FlatList, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native';
 import { AntDesign }  from '@expo/vector-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Transaction } from '../../App';
 import { useRoute } from '@react-navigation/native';
 
 import TransactionItem from '../Components/TransactionItem';
 import Footer from '../Components/Footer';
+import { getTransactions } from '../../firebase.config';
 
 
 const TRANSACTIONS:Transaction[] = [
@@ -68,8 +69,17 @@ const TRANSACTIONS:Transaction[] = [
 
 export default function FriendDetail() {
     const [ accHeight, setHeight ] = useState(0)
+    const [ transactions, setTransactions ] = useState([]);
     const route = useRoute();
     const friend = route.params?.friendData;
+
+    async function refreshTransactions() {
+        await getTransactions(friend.uid);
+    }
+
+    useEffect(() => {
+        refreshTransactions();
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -109,7 +119,7 @@ export default function FriendDetail() {
                 }}
             >
                 <View style={styles.transactionHeader}>
-                    <Text style={styles.text}>Transaction History:</Text>
+                    <Text style={styles.text}>Transaction History (last 5):</Text>
                 </View>
                 <View style={[styles.transactionHeader, {backgroundColor: '#F6F6F6'}]}>
                     <Text style={[styles.text, {textDecorationLine: 'underline', width: '30%'}]}>
@@ -124,7 +134,7 @@ export default function FriendDetail() {
                 </View>
                 <FlatList
                     style={styles.flatContainer}
-                    data = {TRANSACTIONS}
+                    data = {transactions}
                     renderItem = {({ item, index }) =>
                         <TransactionItem
                             data = { item }
@@ -134,7 +144,7 @@ export default function FriendDetail() {
                     }
                 />
             </View>
-            <Footer/>
+            <Footer {...friend}/>
         </View>
     )
 }

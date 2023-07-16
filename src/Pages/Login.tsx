@@ -1,7 +1,5 @@
 import { View, TouchableOpacity, Text, StyleSheet, TextInput, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useState } from 'react';
-import { app, loginEmailPassword } from '../../firebase.config';
-import { useNavigation } from '@react-navigation/native';
 import { login } from '../../firebase.config';
 
 export default function Login( { navigation }) {

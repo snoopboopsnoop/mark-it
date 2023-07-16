@@ -5,13 +5,39 @@ import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FakeCurrencyInput } from 'react-native-currency-input';
+import { useRoute } from '@react-navigation/native';
+import { sendTransaction } from '../../firebase.config';
 
 let degrees = '0deg';
 
+
+
 export default function TransactionPage() {
     const [isPaying, changePayer] = useState(true);
-    const [value, setValue] = useState(0.00);
+    const route = useRoute();
+    const friend = route.params?.friendData;
+
+    const [value, setValue] = useState({
+        friend: friend,
+        amount: 0,
+        note: '',
+        error: '',
+    });
+
     const navigation = useNavigation();
+
+    async function transact() {
+        if(value.amount == 0) {
+            setValue({
+                ...value,
+                error: "can't send a $0 transaction dumbass"
+            })
+            return;
+        }
+        console.log('sending transaction')
+        await sendTransaction(value);
+        navigation.goBack();
+    }
 
     return (
         <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
@@ -25,7 +51,7 @@ export default function TransactionPage() {
                         <View style={styles.pfp}>
                             <TouchableOpacity
                                 onPress={() => {
-                                    setValue(-value)
+                                    setValue({ ...value, amount: -value.amount})
                                     changePayer(!isPaying)
                                 }}
                             >
@@ -61,16 +87,17 @@ export default function TransactionPage() {
                         <FakeCurrencyInput
                             keyboardType='number-pad'
                             style={[styles.text, {fontSize: 69, color: (isPaying) ? '#28BC1B' : '#EE3B3B' }]}
-                            onChangeValue={value => setValue((((value > 0 && !isPaying)) ? -value : value) || 0)}
+                            onChangeValue={(amount) => setValue({ ...value, amount: (((amount > 0 && !isPaying)) ? -amount : amount) || 0})}
                             maxValue={1000}
                             minValue={-1000}
                             prefix={"$"}
                             separator='.'
                             delimiter=','
-                            value={value}
-                            showPositiveSign={value != 0 ? true : false}
+                            value={ value.amount }
+                            showPositiveSign={value.amount != 0 ? true : false}
                             signPosition='beforePrefix'
                         />
+                        {value.error != '' && <Text style={styles.errorText}>{value.error}</Text>}
                     </View>
                     <View
                         style={styles.noteContainer}
@@ -81,15 +108,17 @@ export default function TransactionPage() {
                             style={styles.searchInput}
                             multiline={ true }
                             onEndEditing={() => { Keyboard.dismiss() }}
+                            value={value.note}
+                            onChangeText={(text) => setValue({ ...value, note: text})}
                         />
                     </View>
                 </View>
                 <View style={styles.footer}>
                     <TouchableOpacity
                         style={styles.sendButton}
-                        onPress={() => { navigation.goBack() }}
+                        onPress={ transact }
                     >
-                        <Text style={styles.text}>Send</Text>
+                        <Text style={styles.text}>Send to { friend.username }</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -178,11 +207,16 @@ const styles = StyleSheet.create({
     },
     sendButton: {
         height: '30%',
-        width: '25%',
         backgroundColor: '#B0D3AA',
         borderRadius: 13,
         marginTop: 25,
+        paddingHorizontal: 10,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    errorText: {
+        fontSize: 12,
+        width: '90%',
+        textAlign: 'center',
     }
 })

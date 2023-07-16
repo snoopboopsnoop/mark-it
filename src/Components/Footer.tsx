@@ -1,8 +1,9 @@
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { Friend } from '../../App';
 
-export default function Footer() {
+export default function Footer( friend:Friend ) {
     const navigation = useNavigation()
 
     return (
@@ -11,7 +12,7 @@ export default function Footer() {
           <TouchableOpacity
             style={styles.addButton}
             onPress={() => {
-              navigation.navigate('TransactionPage')
+              navigation.navigate('TransactionPage', { friendData: friend })
             }}
           >
             <AntDesign

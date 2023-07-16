@@ -31,6 +31,7 @@ const FRIENDS:Friend[] = [
     pfp: '../assets/bucket-gorilla.jpg',
     balance: 50.25,
     lastTransaction: new Date(),
+    uid: '0',
   },
   // {
   //   username: 'Desi',
@@ -86,6 +87,7 @@ const defaultFriend:Friend[] = [
     pfp: '../assets/bucket-gorilla.jpg',
     balance: 0,
     lastTransaction: new Date(),
+    uid: '0',
   },
 ]
 
@@ -98,23 +100,41 @@ export default function Home() {
   const isFocused = navigation.isFocused();
 
   async function refreshFriends() {
-    let data:Friend[] = await getFriends();
-    setFriends(data);
+    console.log("refreshFriends called");
+    console.log("before refresh")
+    friends.forEach((entry) => {
+      console.log(entry);
+    })
+    await getFriends()
+      .then((data) =>  {
+        console.log("data: ")
+        console.log(data);
+        setFriends(data)
+      });
     console.log("printing inside refresh")
+    console.log("after refresh")
     friends.forEach((entry) => {
       console.log(entry);
     })
   }
 
   useEffect(() => {
-    async function refreshEffect() {
+    console.log("useeffect")
+    async function refreshEvent() {
+      console.log('refresh event called')
       await refreshFriends();
+      console.log('refresh event over');
     }
-    
-    if(isFocused) {
-      refreshEffect();
-    }
-  }, [])
+    refreshEvent();
+
+  }, [accHeight]);
+
+  // useEffect(() => {
+  //   if(isFocused) {
+  //     console.log('focused')
+  //     refreshFriends();
+  //   }
+  // }, [isFocused]);
 
   // function emptyComponent() {
   //   return(
@@ -128,6 +148,7 @@ export default function Home() {
   friends.forEach((entry) => {
     console.log(entry);
   })
+  console.log("render called");
 
   return (
     <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
@@ -142,7 +163,7 @@ export default function Home() {
           <FlatList
             onRefresh={ refreshFriends }
             refreshing = { refresh }
-            style={styles.flatContainer}  
+            style={styles.flatContainer} 
             data = { friends }
             // ListEmptyComponent={ emptyComponent }
             renderItem = {({ item, index }) => (
