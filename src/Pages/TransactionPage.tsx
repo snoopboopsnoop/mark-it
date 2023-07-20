@@ -6,16 +6,12 @@ import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FakeCurrencyInput } from 'react-native-currency-input';
 import { useRoute } from '@react-navigation/native';
-import { sendTransaction } from '../../firebase.config';
+import { sendTransaction, getFriendData } from '../../firebase.config';
 
-let degrees = '0deg';
-
-
-
-export default function TransactionPage() {
+export default function TransactionPage({ route }) {
     const [isPaying, changePayer] = useState(true);
-    const route = useRoute();
     const friend = route.params?.friendData;
+    console.log("frined => ", friend)
 
     const [value, setValue] = useState({
         friend: friend,

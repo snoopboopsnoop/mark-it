@@ -13,6 +13,8 @@ export default function Header(props: headerProps) {
   const navigation = useNavigation();
   const [modalVisible, setModal] = useState(false);
 
+  console.log("header titke => ", props.title)
+
   return (
     <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
       <View style={styles.header}>

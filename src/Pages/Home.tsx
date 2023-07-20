@@ -98,8 +98,8 @@ export default function Home() {
       const data:Friend[] = await getFriends();
       for(const entry of data) {
         const friend = await getFriendData(entry);
-        console.log("friend")
-        console.log(friend);
+        // console.log("friend")
+        // console.log(friend);
         setFriends(friends => [...friends, friend]);
       }
     }
@@ -110,19 +110,19 @@ export default function Home() {
 
   useEffect(() => {
     if(isFocused) {
-      console.log('focused')
+      // console.log('focused')
       refreshFriends();
     }
   }, [isFocused]);
 
 
-  console.log("printing at render")
-  console.log(friends)
-  for (const entry of friends) {
-    console.log("entry:")
-    console.log(entry);
-  }
-  console.log("render called");
+  // console.log("printing at render")
+  // console.log(friends)
+  // for (const entry of friends) {
+  //   console.log("entry:")
+  //   console.log(entry);
+  // }
+  // console.log("render called");
 
   return (
     <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>

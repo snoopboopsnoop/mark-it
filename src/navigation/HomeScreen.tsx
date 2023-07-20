@@ -11,8 +11,10 @@ import Friends from '../Pages/Friends';
 
 const Stack = createNativeStackNavigator();
 
-export default function UserStack() {
 
+export default function UserStack({ route }) {
+  console.log("detail title => ", route.params?.title)
+  console.log("friend? =>", route.params?.friendData)
   return (  
       <Stack.Navigator>
         <Stack.Screen
@@ -29,13 +31,15 @@ export default function UserStack() {
         <Stack.Screen
           name="FriendDetail"
           component={ FriendDetail }
-          options={{
+          options={({route}) => (
+          {
             header: (props) =>
               <Header
                 home={ false }
-                title={ 'Details' }
-              />  
-          }}
+                title={ route.params?.title }
+              />,
+          })}
+          // initialParams={({route}) => ({friend: route.params?.friendData})}
         />
         <Stack.Screen
           name="TransactionPage"

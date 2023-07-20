@@ -14,7 +14,6 @@ export interface Friend {
   username: string,
   pfp: string,
   balance: number,
-  lastTransaction: Date, 
   uid: string,
 }
 

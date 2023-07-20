@@ -6,6 +6,7 @@ import { Friend } from '../../App';
 export default function Footer( friend:Friend ) {
     const navigation = useNavigation()
 
+    console.log("footer friednd => ", friend)
     return (
         <View style={styles.footer}>
           {/* <View style={[styles.addButton, {borderRadius: 0, backgroundColor: 'transparent'}]}/> */}

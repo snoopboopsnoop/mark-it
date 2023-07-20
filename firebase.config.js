@@ -55,7 +55,7 @@ export async function getTransactions(friendUID) {
             where('paid', '==', friendUID),
             where('debt', '==', user.uid),
         )
-    ));
+    ), orderBy("date", "desc"));
     const querySnapshot = await getDocs(q);
     console.log("snapshot")
     console.log(querySnapshot)
@@ -84,6 +84,41 @@ export async function getTransactions(friendUID) {
     return transactionArray
 }
 
+export async function getLastTrans(uid) {
+    const user = auth.currentUser;
+    const q = query(transactions, or(
+        where('debt', '==', uid),
+        where('paid', '==', uid)
+    ),
+    orderBy("date", "desc"), limit(1));
+    const querySnapshot = await getDocs(q);
+
+    let date = {
+        amount: 0,
+        date: new Date(),
+        paid: '',
+        debt: '',
+        note: '',
+        id: '0',
+    };
+    querySnapshot.forEach((document) => {
+        console.log("last transaction: ")
+        console.log(document.id, ' => ', document.data());
+        const data = document.data();
+        console.log("date")
+        console.log(data.date)
+        console.log(data.date.toDate())
+        date = {
+            amount: data.amount,
+            date: data.date.toDate(),
+            debt: data.debt,
+            note: data.note,
+            paid: data.paid,
+            id: document.id,
+        };
+    })
+    return date;
+}
 
 export async function sendTransaction(value) {
     const user = auth.currentUser;

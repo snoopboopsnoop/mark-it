@@ -4,25 +4,42 @@ import { AntDesign }  from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import { Transaction } from '../../App';
 import { useRoute } from '@react-navigation/native';
+import { getTransactions, getFriendData } from '../../firebase.config';
+import { Friend } from '../../App';
 
 import TransactionItem from '../Components/TransactionItem';
 import Footer from '../Components/Footer';
-import { getTransactions } from '../../firebase.config';
+import Header from '../Components/Header';
 
+
+type friendProps = {
+    friend: Friend,
+}
 
 const TRANSACTIONS:Transaction[] = [
     
 ]
 
-export default function FriendDetail() {
+export default function FriendDetail( { navigation, route }, props: friendProps) {
     const [ accHeight, setHeight ] = useState(0)
     const [ transactions, setTransactions ] = useState<Transaction[]>([]);
-    const route = useRoute();
-    const friend = route.params?.friendData;
+    const friendData = route.params?.friendData;
+    console.log("frienddata username");
+    console.log(friendData.username);
+    const [ friend, setFriend ] = useState<Friend>();
+
+    // navigation.setOptions({
+    //     header: (props) => {
+    //         <Header
+    //             home={ false }
+    //             title={ friendData.username }
+    //         />
+    //     }
+    // })
 
     async function refreshTransactions() {
         console.log("refresh transactions")
-        const data:Transaction[] = await getTransactions(friend.uid);
+        const data:Transaction[] = await getTransactions(friendData.uid);
         console.log('data')
         console.log(data);
         setTransactions(data);
@@ -48,8 +65,12 @@ export default function FriendDetail() {
                             style={styles.pfp}
                             source={require('../assets/bucket-gorilla.jpg')}
                         />
-                        <Text style={styles.accName}>
-                            {friend.username}
+                        <Text
+                            style={[styles.accName, { fontSize: undefined }]}
+                            adjustsFontSizeToFit={true}
+                            numberOfLines= { 1 }
+                        >
+                            {friendData.username}
                         </Text>
                     </View>
                     <View style={styles.moneyContainer}>
@@ -97,7 +118,7 @@ export default function FriendDetail() {
                     }
                 />
             </View>
-            <Footer {...friend}/>
+            <Footer {...friendData}/>
         </View>
     )
 }
@@ -141,11 +162,12 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
     },
     accName: {
-        width: 77,
+        width: '100%',
         fontFamily: 'NunitoSans_400Regular',
         fontSize: 36,
         textAlign: 'center',
-        color: '#696969'
+        color: '#696969',
+        padding: 10,
     },
     moneyContainer: {
         flexDirection: 'column',

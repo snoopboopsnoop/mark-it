@@ -1,6 +1,9 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
-import { Friend } from '../../App';
+import { Friend, Transaction } from '../../App';
 import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import { getLastTrans } from '../../firebase.config';
+
 
 type FriendDisplayProps = {
     friend: Friend,
@@ -8,14 +11,38 @@ type FriendDisplayProps = {
     height: number,
 }
 
+let defaultTransaction:Transaction = {
+    amount: 0,
+    date: new Date(),
+    paid: '',
+    debt: '',
+    note: '',
+    id: '0',
+}
+
 export default function FriendDisplay(props: FriendDisplayProps) {
     const navigation = useNavigation();
+    const [ lastTransaction, setLastTransaction ] = useState<Transaction>(defaultTransaction);
+
+    useEffect(() => {
+        async function getLast() {
+            try{
+                const data:Transaction = await getLastTrans(props.friend.uid);
+                console.log("get last data => ", data)
+                setLastTransaction(data);
+            }
+            catch(error) {
+                console.error(error)
+            }
+        }
+        getLast();
+    }, [])
 
     return (
         <TouchableHighlight
             style={{backgroundColor: (props.color == '#EFEFEF') ? '#F6F6F6' : '#EFEFEF' }}
             onPress={ () =>
-                navigation.navigate('FriendDetail', { friendData: props.friend })
+                navigation.navigate('FriendDetail', { friendData: props.friend, title: props.friend.username })
             }
         >
             <View style={[styles.container, {backgroundColor: props.color, height: (props.height < 70) ? 70 : props.height}]}>
@@ -37,7 +64,7 @@ export default function FriendDisplay(props: FriendDisplayProps) {
                     </Text>
                     <Text style={styles.lastTransText}>
                         Last transaction:{' '}
-                        {props.friend.lastTransaction.getMonth()+1}/{props.friend.lastTransaction.getDate()}/{props.friend.lastTransaction.getFullYear()%100}
+                        {lastTransaction.date.getMonth()+1}/{lastTransaction.date.getDate()}/{lastTransaction.date.getFullYear()%100}
                     </Text>
                 </View>
             </View>
