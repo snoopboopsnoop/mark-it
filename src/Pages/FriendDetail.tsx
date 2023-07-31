@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, FlatList, SafeAreaView, Image, TextInput, Touch
 import { AntDesign }  from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import { Transaction } from '../../App';
-import { useRoute } from '@react-navigation/native';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 import { getTransactions, getFriendData } from '../../firebase.config';
 import { Friend } from '../../App';
 
@@ -23,10 +23,15 @@ const TRANSACTIONS:Transaction[] = [
 export default function FriendDetail( { navigation, route }, props: friendProps) {
     const [ accHeight, setHeight ] = useState(0)
     const [ transactions, setTransactions ] = useState<Transaction[]>([]);
-    const friendData = route.params?.friendData;
+    const [ refresh, setRefresh ] = useState(false);
+    const [ friendData ] = useState(route.params?.friendData);
+    console.log("friendData")
+    console.log(friendData);
     console.log("frienddata username");
     console.log(friendData.username);
     const [ friend, setFriend ] = useState<Friend>();
+
+    const isFocused = useIsFocused();
 
     // navigation.setOptions({
     //     header: (props) => {
@@ -47,9 +52,15 @@ export default function FriendDetail( { navigation, route }, props: friendProps)
         console.log(transactions)
     }
 
+    // useEffect(() => {
+    //     refreshTransactions();
+    // }, [])
+
     useEffect(() => {
-        refreshTransactions();
-    }, [])
+        if(isFocused) {
+            refreshTransactions();
+        }
+    }, [isFocused])
 
     return (
         <View style={styles.container}>
@@ -74,11 +85,15 @@ export default function FriendDetail( { navigation, route }, props: friendProps)
                         </Text>
                     </View>
                     <View style={styles.moneyContainer}>
-                        <Text style={[
+                        <Text
+                            style={[
                                 styles.balanceText,
-                                //{color: (Number(props.friend.balance) == 0) ? '#9F9F9F' : (Number(props.friend.balance) > 0) ? '#28BC1B' : '#EE3B3B'}
-                                ]}>
-                            $50.25
+                                {color: (friendData.balance == 0) ? '#9F9F9F' : (friendData.balance > 0) ? '#28BC1B' : '#EE3B3B'}
+                                ]}
+                            adjustsFontSizeToFit={true}
+                            numberOfLines={1} 
+                        >
+                            ${friendData.balance}
                         </Text>
                         <Text style={styles.lastTransText}>
                             Last transaction: 6/11/23
@@ -107,6 +122,8 @@ export default function FriendDetail( { navigation, route }, props: friendProps)
                     </Text>
                 </View>
                 <FlatList
+                    onRefresh={ refreshTransactions }
+                    refreshing = { refresh }
                     style={styles.flatContainer}
                     data = { transactions }
                     renderItem = {({ item, index }) =>

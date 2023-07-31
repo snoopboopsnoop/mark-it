@@ -89,31 +89,52 @@ export default function Home() {
   const [ friends, setFriends ] = useState<Friend[]>([]);
   const [ refresh, setRefresh ] = useState(false);
   const navigation = useNavigation();
+  //const [ isFocused, setFocused ] = useState(navigation.isFocused)
+  
 
-  const isFocused = navigation.isFocused();
+  const isFocused = useIsFocused();
 
   async function refreshFriends() {
     try {
       setFriends([]);
+      let tempFriends:Friend[] = [];
       const data:Friend[] = await getFriends();
       for(const entry of data) {
         const friend = await getFriendData(entry);
         // console.log("friend")
         // console.log(friend);
-        setFriends(friends => [...friends, friend]);
+        tempFriends.push(friend);
       }
+      tempFriends.sort(compare);
+      setFriends(tempFriends);
     }
     catch(error) {
       console.error(error)
     }
   }
 
+  function compare( a:Friend, b:Friend) {
+    if(a.lastTransaction < b.lastTransaction) {
+      return 1;
+    }
+    else if (a.lastTransaction > b.lastTransaction) {
+      return -1;
+    }
+    return 0;
+  }
+
   useEffect(() => {
+    //console.log("focus update")
     if(isFocused) {
-      // console.log('focused')
+      //console.log('focused')
       refreshFriends();
     }
   }, [isFocused]);
+
+  // useEffect(() => {
+  //   console.log("sorting")
+  //   friends.sort(compare);
+  // }, [friends])
 
 
   // console.log("printing at render")

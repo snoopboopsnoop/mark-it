@@ -56,10 +56,14 @@ export default function FriendDisplay(props: FriendDisplayProps) {
                     </Text>
                 </View>
                 <View style={styles.moneyContainer}>
-                    <Text style={[
+                    <Text
+                        style={[
                             styles.balanceText,
                             {color: (props.friend.balance == 0) ? '#9F9F9F' : (props.friend.balance > 0) ? '#28BC1B' : '#EE3B3B'}
-                            ]}>
+                            ]}
+                        adjustsFontSizeToFit={true}
+                        numberOfLines={1}
+                    >
                         {props.friend.balance < 0 ? '-' : ''}${Math.abs(props.friend.balance).toFixed(2)}
                     </Text>
                     <Text style={styles.lastTransText}>
@@ -111,7 +115,7 @@ const styles =  StyleSheet.create({
     },
     balanceText: {
         width: 117,
-        height: 49,
+        // height: 49,
         fontFamily: 'NunitoSans_400Regular',
         fontSize: 36,
         textAlign: 'center',

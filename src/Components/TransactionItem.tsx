@@ -20,10 +20,11 @@ export default function TransactionItem(props: transactionsProps) {
                 <Text style={[styles.text, {width: '45%', paddingRight: 45}]}>
                     {props.data.note}
                 </Text>
-                <Text style={[styles.text, {width: '25%', color: (props.data.amount == 0) ? '#9F9F9F' : (props.data.amount > 0) ? '#28BC1B' : '#EE3B3B'}]}>
+                <Text 
+                    style={[styles.text, {width: '25%', color: (props.data.amount == 0) ? '#9F9F9F' : (props.data.amount > 0) ? '#28BC1B' : '#EE3B3B'}]}
+                >
                     {(props.data.amount < 0) ? '-' : '+'}
-                    $
-                    {Math.abs(props.data.amount)}
+                    ${Math.abs(props.data.amount).toFixed(2)}
                 </Text>
             </View>
         </View>

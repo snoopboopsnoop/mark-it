@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, query, orderBy, limit, collection, getDocs, getDoc, where, or, and, addDoc, } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, query, orderBy, limit, collection, getDocs, getDoc, where, or, and, addDoc, updateDoc } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
 import Constants from 'expo-constants';
@@ -120,6 +120,7 @@ export async function getLastTrans(uid) {
     return date;
 }
 
+// positive amount means they owe you money
 export async function sendTransaction(value) {
     const user = auth.currentUser;
     const paid = value.amount > 0;
@@ -132,6 +133,40 @@ export async function sendTransaction(value) {
         note: value.note,
     });
     console.log("transaction sent")
+    await changeBalance(value.amount, value.friend.uid);
+}
+
+export async function changeBalance(amount, friendUID) {
+    const user = auth.currentUser;
+    let first = false;
+    let balance = 0;
+    let id = '';
+    const q = query(friendships, or(
+        and(
+            where('friend1', '==', user.uid),
+            where('friend2', '==', friendUID),
+        ),
+        and(
+            where('friend2', '==', user.uid),
+            where('friend1', '==', friendUID),
+        )
+    ));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((document) => {
+        const data = document.data();
+        first = (data.friend1 == user.uid) ? true : false;
+        balance = data.balance;
+        id = document.id;
+    })
+    if(first) {
+        balance = balance + amount;
+    }
+    else {
+        balance = balance - amount;
+    }
+    const balanceRef = doc(db, "friendships", id);
+
+    await updateDoc(balanceRef, { balance: balance })
 }
 
 export async function getFriends() {
