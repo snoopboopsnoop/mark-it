@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, query, orderBy, limit, collection, getDocs, getDoc, where, or, and, addDoc, updateDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, query, orderBy, limit, collection, getDocs, getDoc, where, or, and, addDoc, updateDoc, exists } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
 import Constants from 'expo-constants';
@@ -18,6 +18,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const users = collection(db, "users");
 const friendships = collection(db, "friendships");
 const transactions = collection(db, "transactions");
 
@@ -213,6 +214,78 @@ export async function getFriendData( entry ) {
         lastTransaction: new Date(),
         uid: entry.uid,
     };
+}
+
+export async function getFriendWithUsername(username) {
+    let uid = "";
+    console.log("finding friend w username", username)
+    const q = query(users, where('username', '==', username));
+    const querySnapshot = await getDocs(q);
+    if(querySnapshot.empty) {
+        console.log("doesn't exist")
+        throw new Error('Error: user does not exist')
+    }
+    querySnapshot.forEach((document) => {
+        console.log('document id:', document.id)
+        uid = document.id;
+    })
+    return uid;
+}
+
+export async function sendFriendRequest(friendUID) {
+    const user = auth.currentUser;
+    const q = query(friendships, or(
+        and(
+            where('friend1', '==', user.uid),
+            where('friend2', '==', friendUID),
+        ),
+        and(
+            where('friend2', '==', user.uid),
+            where('friend1', '==', friendUID),
+        )
+    ));
+    const querySnapshot = await getDocs(q);
+    if(!querySnapshot.empty) {
+        querySnapshot.forEach((document) => {
+            if(document.data().type == "pending") {
+                throw new Error("request is already pending be patient")
+            }
+            else {
+                throw new Error("bruh you're already friends with them")
+            }
+        })
+        
+    }
+
+    await addDoc(friendships, {
+        balance: 0,
+        friend1: user.uid,
+        friend2: friendUID,
+        type: "pending",
+    })
+}
+
+export async function getFriendRequests() {
+    let requests = [];
+    let count = 0;
+    let out = {
+        data: requests,
+        count: count,
+    };
+
+    const user = auth.currentUser;
+    const q = query(friendships, and(
+        where('friend2', '==', user.uid),
+        where('friend1', '==', friendUID),
+        where('type', '==', 'pending'),
+    ));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((document) => {
+        const data = document.data();
+        requests.push(data.friend2);
+        ++count;
+    })
+    return out;
 }
 
 export { app };

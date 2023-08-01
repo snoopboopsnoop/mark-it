@@ -11,20 +11,12 @@ type headerProps = {
 
 export default function Header(props: headerProps) {
   const navigation = useNavigation();
-  const [modalVisible, setModal] = useState(false);
 
   console.log("header titke => ", props.title)
 
   return (
     <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
       <View style={styles.header}>
-          <Modal
-            visible={ modalVisible }  
-          >
-            <View style={styles.modal}>
-              <Text>real shit</Text>
-            </View>
-          </Modal>
           <View style={styles.headerContainer}>
               <View style={styles.upperHeader}>
                 <Image
@@ -71,7 +63,7 @@ export default function Header(props: headerProps) {
                       placeholder="search friends..."
                       placeholderTextColor={'#797979'}
                   />
-              </View>
+                </View>
               }
               {!props.home &&
                 <View style={styles.backBar}>

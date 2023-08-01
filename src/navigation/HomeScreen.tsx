@@ -8,6 +8,7 @@ import FriendDetail from '../Pages/FriendDetail';
 import TransactionPage from '../Pages/TransactionPage';
 import Settings from '../Pages/Settings';
 import Friends from '../Pages/Friends';
+import FriendRequests from '../Pages/FriendRequests';
 
 const Stack = createNativeStackNavigator();
 
@@ -44,13 +45,14 @@ export default function UserStack({ route }) {
         <Stack.Screen
           name="TransactionPage"
           component= { TransactionPage }
-          options={{
+          options={({route}) => (
+            {
             header: (props) =>
               <Header
                 home={ false }
-                title={ 'New Transaction' }
+                title={ `Transaction to ${route.params?.friendData.username}`}
               /> 
-          }}
+          })}
         />
         <Stack.Screen
           name="Settings"
@@ -72,6 +74,17 @@ export default function UserStack({ route }) {
                 home={ false }
                 title={ 'Add Friends' }
               /> 
+          }}
+        />
+        <Stack.Screen
+          name="Requests"
+          component={ FriendRequests }
+          options={{
+            header: (props) => 
+              <Header
+                home={ false }
+                title={ 'Incoming Friend Requests' }
+              />
           }}
         />
       </Stack.Navigator>

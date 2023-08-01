@@ -13,7 +13,7 @@ type transactionsProps = {
 export default function TransactionItem(props: transactionsProps) {
     return (
         <View>
-            <View style={[styles.transactionView, {backgroundColor: props.color, height: props.height}]}>
+            <View style={[styles.transactionView, {backgroundColor: props.color, height: props.height, paddingTop: props.height/3}]}>
                 <Text style={[styles.text, {width: '30%'}]}>
                     {props.data.date.getMonth()+1}/{props.data.date.getDate()}/{props.data.date.getFullYear()%100}
                 </Text>
@@ -34,9 +34,7 @@ export default function TransactionItem(props: transactionsProps) {
 const styles = StyleSheet.create({
     transactionView: {
         width: '100%',
-        height: 74,
         paddingHorizontal: 29,
-        paddingVertical: 26,
         flexDirection: 'row',
     },
     text: {
