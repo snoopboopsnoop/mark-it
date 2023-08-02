@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, query, orderBy, limit, collection, getDocs, getDoc, where, or, and, addDoc, updateDoc, exists } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, query, orderBy, limit, collection, getDocs, getDoc, where, or, and, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
 import Constants from 'expo-constants';
@@ -173,10 +173,12 @@ export async function changeBalance(amount, friendUID) {
 export async function getFriends() {
     console.log("getFriends called");
     const user = auth.currentUser;
-    const q = query(friendships, or(
-        where('friend1', '==', user.uid),
-        where('friend2', '==', user.uid),
-        ));
+    const q = query(friendships, and(
+        where('type', '==', 'friend'),
+        or(
+            where('friend1', '==', user.uid),
+            where('friend2', '==', user.uid),
+        )));
     const querySnapshot = await getDocs(q);
     console.log("snapshot: ")
     console.log(querySnapshot)
@@ -267,25 +269,51 @@ export async function sendFriendRequest(friendUID) {
 
 export async function getFriendRequests() {
     let requests = [];
-    let count = 0;
-    let out = {
-        data: requests,
-        count: count,
-    };
+    // let count = 0;
+    // let out = {
+    //     data: requests,
+    //     count: count,
+    // };
 
     const user = auth.currentUser;
     const q = query(friendships, and(
         where('friend2', '==', user.uid),
-        where('friend1', '==', friendUID),
         where('type', '==', 'pending'),
     ));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((document) => {
         const data = document.data();
-        requests.push(data.friend2);
-        ++count;
+        requests.push({
+            uid: data.friend1,
+            docID: document.id,
+        });
+        // ++count;
     })
-    return out;
+    return requests;
+}
+
+export async function getUserInfo(request) {
+    const docRef = doc(db, "users", request.uid);
+    const docSnap = await getDoc(docRef);
+
+    const data = docSnap.data();
+    return {
+        username: data.username,
+        pfp: data.pfp,
+        requestID: request.docID,
+    }
+}
+
+export async function acceptRequest(id) {
+    const requestRef = doc(db, "friendships", id);
+
+    await updateDoc(requestRef, {
+        type: 'friend'
+    })
+}
+
+export async function deleteRequest(id) {
+    await deleteDoc(doc(db, "friendships", id));
 }
 
 export { app };

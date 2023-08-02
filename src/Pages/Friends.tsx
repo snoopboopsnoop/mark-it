@@ -34,7 +34,7 @@ export default function Friends({ navigation }) {
             >
                 <Text style={styles.pendingText}>Incoming Friend Requests</Text>
                 <View style={styles.pendingRight}>
-                    <Text style={styles.pendingText}>0</Text>
+                    {/* <Text style={styles.pendingText}>0</Text> */}
                     <AntDesign name="right" size={20} color="#696969" />
                 </View>
             </TouchableOpacity>

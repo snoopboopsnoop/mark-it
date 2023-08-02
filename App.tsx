@@ -5,9 +5,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import RootNavigation from './src/navigation/Index';
 
-interface User {
+export interface User {
   username: string,
   pfp: string,
+  requestID: string,
 }
 
 export interface Friend {
