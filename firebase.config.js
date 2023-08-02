@@ -316,4 +316,13 @@ export async function deleteRequest(id) {
     await deleteDoc(doc(db, "friendships", id));
 }
 
+export async function checkUsername(username) {
+    const q = query(users, where('username', '==', username));
+    const querySnapshot = await getDocs(q);
+    if(!querySnapshot.empty) {
+        return false;
+    }
+    return true;
+}
+
 export { app };

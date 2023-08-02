@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
 import { AntDesign } from '@expo/vector-icons';
 
-import { registration } from '../../firebase.config';
+import { registration, checkUsername } from '../../firebase.config';
 
 const auth = getAuth(app);
 
@@ -32,6 +32,11 @@ export default function Signup() {
         }
         
         try {
+            const result = await checkUsername(value.username);
+            if(!result) {
+                setValue({...value, error: "Error: username already exists"})
+                return;
+            }
             await registration(value.email, value.password, value.firstName, value.lastName, value.username);
             navigation.navigate('Login')
         } 
