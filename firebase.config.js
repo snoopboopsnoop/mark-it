@@ -1,18 +1,37 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, query, orderBy, limit, collection, getDocs, getDoc, where, or, and, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import {
+    FIREBASE_API_KEY,
+    FIREBASE_AUTH_DOMAIN,
+    FIREBASE_PROJECT_ID,
+    FIREBASE_STORAGE_BUCKET,
+    FIREBASE_MESSAGING_SENDER_ID,
+    FIREBASE_APP_ID,
+    FIREBASE_MEASUREMENT_ID,
+} from '@env';
 
 import Constants from 'expo-constants';
 
+// const firebaseConfig = {
+//     apiKey: Constants.manifest?.extra?.firebaseApiKey,
+//     authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
+//     projectId: Constants.manifest?.extra?.firebaseProjectId,
+//     storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,    
+//     messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
+//     appId: Constants.manifest?.extra?.firebaseAppId,
+//     measurementId: Constants.manifest?.extra?.firebaseMeasurementId,
+// };
 const firebaseConfig = {
-    apiKey: Constants.manifest?.extra?.firebaseApiKey,
-    authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
-    projectId: Constants.manifest?.extra?.firebaseProjectId,
-    storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,    
-    messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
-    appId: Constants.manifest?.extra?.firebaseAppId,
-    measurementId: Constants.manifest?.extra?.firebaseMeasurementId,
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,    
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
+
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);

@@ -29,6 +29,9 @@ export default {
       "favicon": "./src/assets/favicon.png"
     },
     "extra": {
+      "eas": {
+        "projectId": "21c69c9c-83c2-4d14-be8e-e2455f09ff32"
+      },
       firebaseApiKey: process.env.FIREBASE_API_KEY,
       firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN,
       firebaseProjectId: process.env.FIREBASE_PROJECT_ID,
